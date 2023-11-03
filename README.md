@@ -1,5 +1,5 @@
 # crafty-fusion-pro-smtp-forms
-* M_G_X softwares.
+* <h2> M_G_X softwares. </h2>
 *
 * @package   M_G_X\Main
 * @version   3.9
