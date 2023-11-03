@@ -1,6 +1,6 @@
 # crafty-fusion-pro-smtp-forms
 * <h2> M_G_X softwares. </h2>
-*
+
 * @package   M_G_X\Main
 * @version   3.9
 * Plugin Name: Crafty Fusion Pro - SMTP Forms
@@ -10,8 +10,8 @@
 * Author: !-CODE | M_G_X CEO & Founder | <a href="https://unknown-sudo-max.github.io/zone/!-CODE/LICENSE-AGREEMENT.html" onclick="window.open(this.href, '_blank'); return false;">The license</a>
 * License: !-CODE LICENSE-AGREEMENT
 * Text-Domain: crafty-fusion-pro-smtp-forms
-* 
 * <h2> What's New :- </h2>
+
 * <ul><ol>
 * <li>The forms design enhanced </li>
 * <li>Added id for the forms to redirect</li>
@@ -22,7 +22,7 @@
 * <li>Table to access to db</li>
 *</ol></ul>
 * <h2>Comming soon - v 4.0 :- </h2>
-*
+
 * 1. Access to Form configration
 * 2. Access to the plugin general
 * 3. New branch in Help Center > Mail us
