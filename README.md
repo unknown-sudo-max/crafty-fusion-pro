@@ -10,7 +10,6 @@
 * Author: !-CODE | M_G_X CEO & Founder | <a href="https://unknown-sudo-max.github.io/zone/!-CODE/LICENSE-AGREEMENT.html" onclick="window.open(this.href, '_blank'); return false;">The license</a>
 * License: !-CODE LICENSE-AGREEMENT
 * Text-Domain: crafty-fusion-pro-smtp-forms
-*
 * 
 * <h2> What's New :- </h2>
 * 
@@ -22,9 +21,7 @@
 * 6. Help Center
 * 7. Table to access to db
 *
-*
 * <h2>Comming soon - v 4.0 :- </h2>
-*
 *
 * 1. Access to Form configration
 * 2. Access to the plugin general
