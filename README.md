@@ -1,4 +1,4 @@
-# crafty-fusion-pro-smtp-forms
+# Crafty Fusion Pro
 * <h2> M_G_X softwares. </h2>
 
 * @package   M_G_X\Main
