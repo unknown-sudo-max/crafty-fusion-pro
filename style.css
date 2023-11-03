@@ -1,0 +1,49 @@
+
+    /* CSS Styles for the Page Excerpt Plugin */
+.page-excerpt {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+.page-excerpt img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.page-excerpt h2 {
+    text-align: right;
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.page-excerpt p {
+    text-align: right;
+    margin: 10px 0;
+    color: #666;
+}
+
+.page-excerpt a {
+    display: inline-block;
+    text-align: right;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.page-excerpt a:hover {
+    color: #fff;
+
+    background-color: #776bc3;
+}
+
+
+
+ 
