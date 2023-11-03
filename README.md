@@ -12,7 +12,7 @@
 * Text-Domain: crafty-fusion-pro-smtp-forms
 *
 * 
-* What's New :-
+* <h2> What's New :- </h2>
 * 
 * 1. The forms design enhanced
 * 2. Added id for the forms to redirect
@@ -23,7 +23,7 @@
 * 7. Table to access to db
 *
 *
-* Comming soon - v 4.0 :-
+* <h2>Comming soon - v 4.0 :- </h2>
 *
 *
 * 1. Access to Form configration
