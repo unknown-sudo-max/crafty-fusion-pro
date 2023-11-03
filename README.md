@@ -12,18 +12,17 @@
 * Text-Domain: crafty-fusion-pro-smtp-forms
 * <h2> What's New :- </h2>
 
-* <ul><ol>
-* <li>The forms design enhanced </li>
-* <li>Added id for the forms to redirect</li>
-* <li>License updates</li>
-* <li>SMTP Server online connect</li>
-* <li>Plugin Activation</li>
-* <li>Help Center</li>
-* <li>Table to access to db</li>
-*</ol></ul>
+* The forms design enhanced
+* Added id for the forms to redirect
+* License updates
+* SMTP Server online connect
+* Plugin Activation
+* Help Center
+* Table to access to db
+ 
 * <h2>Comming soon - v 4.0 :- </h2>
 
-* 1. Access to Form configration
-* 2. Access to the plugin general
-* 3. New branch in Help Center > Mail us
-* 4. Plugin Auto Update 
+* Access to Form configration
+* Access to the plugin general
+* New branch in Help Center > Mail us
+* Plugin Auto Update 
