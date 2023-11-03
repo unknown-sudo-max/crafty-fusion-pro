@@ -9,7 +9,6 @@
 * Version: 3.9
 * Author: !-CODE | M_G_X CEO & Founder | <a href="https://unknown-sudo-max.github.io/zone/!-CODE/LICENSE-AGREEMENT.html" onclick="window.open(this.href, '_blank'); return false;">The license</a>
 * License: !-CODE LICENSE-AGREEMENT
-* License URI:https://unknown-sudo-max.github.io/zone/!-CODE/LICENSE-AGREEMENT.html
 * Text-Domain: crafty-fusion-pro-smtp-forms
 *
 * 
