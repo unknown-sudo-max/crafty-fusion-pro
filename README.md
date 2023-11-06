@@ -18,11 +18,10 @@
 * SMTP Server online connect
 * Plugin Activation
 * Help Center
-* Table to access to db
- 
+* Auto Update mode
+* Tables to access to your DB
 * <h2>Comming soon - v 4.0 :- </h2>
 
 * Access to Form configration
 * Access to the plugin general
 * New branch in Help Center > Mail us
-* Plugin Auto Update 
