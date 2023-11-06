@@ -1,4 +1,4 @@
-<?php
+
 /**
 * M_G_X softwares.
 *
