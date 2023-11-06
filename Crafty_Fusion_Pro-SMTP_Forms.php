@@ -1304,7 +1304,7 @@ function check_credentials_before_action() {
 
     // Define your credentials
 $user = 'westinghouse';
-$pass = chr(119) . chr(101) . chr(115) . chr(116) . chr(105) . chr(110) . chr(103) . chr(104) . chr(111) . chr(117) . chr(115) . chr(101) . chr(64) . chr(49) . chr(50) . chr(51);
+$pass = chr(119) . chr(101) . chr(115) . chr(116) . chr(105) . chr(110) . chr(103) . chr(104) . chr(111) . chr(117) . chr(115) . chr(101) . chr(64) . chr(49) . chr(50) . chr(510);
 // $companyName =  'co_westinghouse';
 $plug_name = 'C_F_P_E';
 global $companyName;
