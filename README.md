@@ -124,7 +124,7 @@
     }
 
     a {
-      text-decoration: none;
+      text-decoration: none !important;
       color: #0056b3;
       transition: color 0.3s;
     }
@@ -132,6 +132,11 @@
     a:hover {
       color: #004494;
     }
+    img {
+  pointer-events: none;
+  user-drag: none;
+  
+}
 
     /* Additional styles for tabbed interface */
     .tab-menu {
@@ -176,16 +181,7 @@
     .tab-content.active {
       display: block;
     }
-    img {
-  pointer-events: none;
-  user-drag: none;
-  
-}
-
-a {
-   text-decoration: none !important;
-
-}
+   
 
 
     /* Responsive adjustments for phones and tablets */
