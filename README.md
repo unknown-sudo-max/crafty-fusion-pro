@@ -58,8 +58,8 @@
       <p><strong>Version:</strong> 3.9</p>
       <p><strong>Author:</strong> !-CODE | M_G_X CEO & Founder</p>
       <p><strong>License:</strong> !-CODE LICENSE-AGREEMENT</p>
-       <a href="https://unknown-sudo-max.github.io/zone/!-CODE/LICENSE-AGREEMENT.html" class="btn" target="_blank">View License Agreement</a>
-      <p><strong>Text-Domain:</strong> crafty-fusion-pro-smtp-forms</p>
+      <p><strong>Text-Domain:</strong> crafty-fusion-pro</p>
+      <a href="https://unknown-sudo-max.github.io/zone/!-CODE/LICENSE-AGREEMENT.html" class="btn" target="_blank">View License Agreement</a>
       <h2>Description:</h2>
       <p>Seamlessly Unleash the Power of Crafty Fusion Pro: Elevate Your SMTP & Forms!</p>
       <p><strong>Shortcuts:</strong> [mgx_custom_form_with_category] [mgx_custom_form] [mgx_contact_with_us_form] [mgx_page_excerpt]</p>
