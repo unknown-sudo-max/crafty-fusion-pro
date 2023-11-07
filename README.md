@@ -176,6 +176,17 @@
     .tab-content.active {
       display: block;
     }
+    img {
+  pointer-events: none;
+  user-drag: none;
+  
+}
+
+a {
+   text-decoration: none !important;
+
+}
+
 
     /* Responsive adjustments for phones and tablets */
     @media (max-width: 992px) {
