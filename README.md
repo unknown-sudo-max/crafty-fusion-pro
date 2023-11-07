@@ -20,7 +20,8 @@
       color: #fff;
       text-align: center;
       padding: 20px;
-      border-radius: 5px;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
     }
     h1 {
       font-size: 2.5rem;
@@ -36,9 +37,10 @@
     }
     .logo {
       text-align: center;
+      margin-bottom: 20px;
     }
     .logo img {
-      max-width: 100%;
+      max-width: 150px;
       height: auto;
     }
     .btn {
@@ -58,13 +60,21 @@
     .btn:hover {
       background-color: #0056b3;
     }
+    h2 {
+      font-size: 1.5rem;
+      color: #007BFF;
+    }
+    ul {
+      list-style: disc;
+      margin-left: 20px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <div class="logo">
-        <img src="https://unknown-sudo-max.github.io/crafty-fusion-pro/cdn/img/logo.png" alt="Plugin Logo" width="150">
+        <img src="https://unknown-sudo-max.github.io/crafty-fusion-pro/cdn/img/logo.png" alt="Plugin Logo">
       </div>
       <h1>Crafty Fusion Pro - SMTP Forms</h1>
     </div>
