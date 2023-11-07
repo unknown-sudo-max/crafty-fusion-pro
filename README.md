@@ -10,6 +10,7 @@
       font-family: 'Helvetica Neue', sans-serif;
       margin: 0;
       padding: 0;
+      user-select:none;
     }
 
     .container {
