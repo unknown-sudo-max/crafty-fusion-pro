@@ -131,20 +131,14 @@ function add_smtp_settings_menu() {
     
 }
 
-function add_smtp_settings_link($links) {
-    $settings_link = '<a href="options-general.php?page=crafty-fusion-pro">Settings</a>';
-    array_push($links, $settings_link);
-    return $links;
-}
+ 
 
 
 
 
 
 add_action('admin_menu', 'add_smtp_settings_menu');
-add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'add_smtp_settings_link');
-
-
+ 
 
 
 
