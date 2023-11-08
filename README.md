@@ -2,16 +2,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="https://unknown-sudo-max.github.io/crafty-fusion-pro/cdn/img/logo.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <title>Crafty Fusion Pro</title>
    <style>
+      .img-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            text-align: center;
+        }
+        .img-popup img {
+            max-width: 80%;
+            max-height: 80%;
+            margin: auto;
+            margin-top: 3%;
+        }
+
+        .img-popup .caption {
+            color: white;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .src-img{
+          width: 100%;
+        }
+
     body {
       background-color: #f7f8fa;
       font-family: 'Helvetica Neue', sans-serif;
       margin: 0;
       padding: 0;
-      user-select:none;
     }
 
     .container {
@@ -126,7 +151,7 @@
     }
 
     a {
-      text-decoration: none !important;
+      text-decoration: none;
       color: #0056b3;
       transition: color 0.3s;
     }
@@ -134,11 +159,6 @@
     a:hover {
       color: #004494;
     }
-    img {
-  pointer-events: none;
-  user-drag: none;
-  
-}
 
     /* Additional styles for tabbed interface */
     .tab-menu {
@@ -183,8 +203,6 @@
     .tab-content.active {
       display: block;
     }
-   
-
 
     /* Responsive adjustments for phones and tablets */
     @media (max-width: 992px) {
@@ -239,7 +257,8 @@
         <a href="javascript:void(0)" class="tab-link" onclick="showTab('tab2')">Description</a>
         <a href="javascript:void(0)" class="tab-link" onclick="showTab('tab3')">Shortcuts</a>
         <a href="javascript:void(0)" class="tab-link" onclick="showTab('tab4')">What's New</a>
-        <a href="javascript:void(0)" class="tab-link" onclick="showTab('tab5')">Coming soon - v 4.0</a>
+        <a href="javascript:void(0)" class="tab-link" onclick="showTab('tab5')">Screenshots</a>
+        <a href="javascript:void(0)" class="tab-link" onclick="showTab('tab6')">Coming soon</a>
       </div>
 
       <!-- Tab Content Sections -->
@@ -284,9 +303,27 @@
         </ul>
       </div>
 
-      <div id="tab5" class="tab-content">
+     <div id="tab5" class="tab-content">
+    <h2>Screenshots</h2>
+    <ul>
+            <li><a href="javascript:void(0);" onclick="showImage('https://unknown-sudo-max.github.io/crafty-fusion-pro/assets/CFP.PNG', 'Click on Settings')"><img class="src-img" src="https://unknown-sudo-max.github.io/crafty-fusion-pro/assets/CFP.PNG" alt="Screenshot 1"></a><p style="text-align: center;">Click on Settings</p></li><br/>
+            <li><a href="javascript:void(0);" onclick="showImage('https://unknown-sudo-max.github.io/crafty-fusion-pro/assets/CFP2.PNG', 'Activate the plugin')"><img class="src-img" src="https://unknown-sudo-max.github.io/crafty-fusion-pro/assets/CFP2.PNG" alt="Screenshot 2"></a><p style="text-align: center;">Activate the plugin</p></li><br/>
+            <li><a href="javascript:void(0);" onclick="showImage('https://unknown-sudo-max.github.io/crafty-fusion-pro/assets/CFP3.PNG', 'Enable or disable the SMTP server Connect')"><img class="src-img" src="https://unknown-sudo-max.github.io/crafty-fusion-pro/assets/CFP3.PNG" alt="Screenshot 3"></a><p style="text-align: center;">Enable or disable the SMTP server Connect</p></li><br/>
+            <li><a href="javascript:void(0);" onclick="showImage('https://unknown-sudo-max.github.io/crafty-fusion-pro/assets/CFP4.PNG', 'Check your activation is done')"><img class="src-img" src="https://unknown-sudo-max.github.io/crafty-fusion-pro/assets/CFP4.PNG" alt="Screenshot 4"></a><p style="text-align: center;">Check your activation is done</p></li><br/>
+        </ul>
+</div>
+
+<div id="imgPopup" class="img-popup">
+        <span onclick="closeImage()" style="position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer;">&times;</span>
+        <img id="popupImage" src="" alt="Popup Image">
+        <p id="popupCaption" class="caption"></p>
+    </div>
+
+
+      <div id="tab6" class="tab-content">
         <h2>Coming soon - v 4.0</h2>
         <ul>
+          <li>Access to Form configuration</li>
           <li>Access to Form configuration</li>
           <li>Access to the plugin general</li>
           <li>New branch in Help Center > Mail us</li>
@@ -316,6 +353,19 @@
 
     // Initially, show the first tab content
     showTab('tab1');
+
+
+
+     // JavaScript functions for showing and closing the image popup
+        function showImage(imageUrl,caption) {
+            document.getElementById('popupImage').src = imageUrl;
+             document.getElementById('popupCaption').textContent = caption;
+            document.getElementById('imgPopup').style.display = 'block';
+        }
+
+        function closeImage() {
+            document.getElementById('imgPopup').style.display = 'none';
+        }
   </script>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
