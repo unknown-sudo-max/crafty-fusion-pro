@@ -31,6 +31,11 @@
         .src-img{
           width: 100%;
         }
+        .closebtn:hover{
+
+          color: white;
+
+        }
 
     body {
       background-color: #f7f8fa;
@@ -314,7 +319,7 @@
 </div>
 
 <div id="imgPopup" class="img-popup">
-        <span onclick="closeImage()" style="position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer;">&times;</span>
+        <span onclick="closeImage()" style="position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer;" class="closebtn">&times;</span>
         <img id="popupImage" src="" alt="Popup Image">
         <p id="popupCaption" class="caption"></p>
     </div>
