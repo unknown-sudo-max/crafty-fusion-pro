@@ -279,7 +279,7 @@
 
       <div id="tab2" class="tab-content">
         <h2>Description</h2>
-        <p>Seamlessly Unleash the Power of Crafty Fusion Pro: Elevate Your SMTP & Forms!</p>
+        <p>Seamlessly Unleash the Power of Crafty Fusion Pro to elevate your WordPress multitasking capabilities, With blending advanced features to enhance your website's performance and user experience</p>
       </div>
 
       <div id="tab3" class="tab-content">
