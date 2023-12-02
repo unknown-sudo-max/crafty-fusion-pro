@@ -329,8 +329,8 @@
         <h2>Coming soon - v 4.0</h2>
         <ul>
           <li>Access to Form configuration</li>
-          <li>Access to Form configuration</li>
           <li>Access to the plugin general</li>
+          <li>Link Checker</li>   
           <li>New branch in Help Center > Mail us</li>
         </ul>
       </div>
