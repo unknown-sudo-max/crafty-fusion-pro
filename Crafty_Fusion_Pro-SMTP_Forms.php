@@ -1509,11 +1509,14 @@ function custom_form_submission() {
         
         // Get the site name
 $site_name = get_bloginfo('name');
+$site_domain = home_url();
 global $to;
 $subject = 'New Warranty-Activation on ' . $site_name;
 
 $message = '<html><body>';
 $message .= '<h2 style="font-family: Arial, sans-serif; color: #333;">New Warranty Activation</h2>';
+$message .= '<p style="font-family: Arial, sans-serif; color: #333;">Site: <a href="' . esc_url($site_domain) . '">' . esc_html($site_name) . '</a></p>';
+
 $message .= '<table style="font-family: Arial, sans-serif; border-collapse: collapse; width: 100%;">';
 $message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Name:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($name) . '</td></tr>';
 $message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Phone:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($phone) . '</td></tr>';
@@ -1526,7 +1529,7 @@ $message .= '</table>';
 
 $message .= '<div style="font-family: \'Rajdhani\', sans-serif; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: -20px -9px 20px 20px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);user-select:none;">';
 $message .= '<p style="font-weight: bold;color: #afafaf;">BR,</p>';
-$message .= '<p style="color:gray;font-weight: bolder;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
+$message .= '<p style="color:gray;font-weight: bolder;text-align:center;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
 $message .= '</div>';
 
 
@@ -1862,12 +1865,15 @@ function contact_form_submission() {
         
         // Get the site name
 $site_name = get_bloginfo('name');
+$site_domain = home_url();
 global $to;
 $subject = 'New Contact Us on ' . $site_name;
 
 // Create an HTML table to format the data
 $message = '<html><body>';
 $message .= '<h2 style="font-family: Arial, sans-serif; color: #333;">New Contact Us</h2>';
+$message .= '<p style="font-family: Arial, sans-serif; color: #333;">Site: <a href="' . esc_url($site_domain) . '">' . esc_html($site_name) . '</a></p>';
+        
 $message .= '<table style="font-family: Arial, sans-serif; border-collapse: collapse; width: 100%;">';
 $message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Name:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($name) . '</td></tr>';
 $message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Phone:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($phone) . '</td></tr>';
@@ -1880,7 +1886,7 @@ $message .= '</table>';
 // Signature container with Google Font
 $message .= '<div style="font-family: \'Rajdhani\', sans-serif; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: -20px -9px 20px 20px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);user-select:none;">';
 $message .= '<p style="font-weight: bold;color: #afafaf;">BR,</p>';
-$message .= '<p style="color:gray;font-weight: bolder;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
+$message .= '<p style="color:gray;font-weight: bolder;text-align:center;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
 $message .= '</div>';
 
 
