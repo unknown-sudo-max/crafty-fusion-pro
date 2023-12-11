@@ -1528,8 +1528,8 @@ $message .= '</table>';
 
 
 $message .= '<div style="font-family: \'Rajdhani\', sans-serif; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: -20px -9px 20px 20px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);user-select:none;">';
-$message .= '<p style="font-weight: bold;color: #afafaf;">BR,</p>';
-$message .= '<p style="color:gray;font-weight: bolder;text-align:center;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
+$message .= '<p style="font-weight: bold;color: #afafaf;user-select:none;">BR,</p>';
+$message .= '<p style="color:gray;font-weight: bolder;text-align:center;user-select:none;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
 $message .= '</div>';
 
 
@@ -1885,8 +1885,8 @@ $message .= '</table>';
 
 // Signature container with Google Font
 $message .= '<div style="font-family: \'Rajdhani\', sans-serif; margin-top: 20px; padding: 10px;background: rgba(255, 255, 255, 0.2);border-radius: 16px;box-shadow: -20px -9px 20px 20px rgba(0, 0, 0, 0.1);backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);border: 1px solid rgba(255, 255, 255, 0.3);user-select:none;">';
-$message .= '<p style="font-weight: bold;color: #afafaf;">BR,</p>';
-$message .= '<p style="color:gray;font-weight: bolder;text-align:center;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
+$message .= '<p style="font-weight: bold;color: #afafaf;user-select:none;">BR,</p>';
+$message .= '<p style="color:gray;font-weight: bolder;text-align:center;user-select:none;">Powered by !-CODE  &  M_G_X Servers</p><p style="color:gray;font-weight: bolder;text-align:center">&copy; ' . date("Y") . '</p>';
 $message .= '</div>';
 
 
