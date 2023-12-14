@@ -1420,6 +1420,26 @@ function checkInput(inputElement) {
                                     <option value="الفيوم">الفيوم</option>
                                 </select>
                             </div>
+                              <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var form = document.querySelector(".my-form");
+
+        form.addEventListener("submit", function(event) {
+            var deviceSelect = document.getElementById("device");
+            var citySelect = document.getElementById("city");
+
+            
+            var validDeviceValues = ["ثلاجة", "غسالات ملابس", "غسالات اطباق", "ميكروويف", "تكييف", "ديب فريزر", "مجفف - دراير", "لاندري", "ايس ميكر"];
+            var validCityValues = ["الجيزة", "القاهرة", "الدقهلية", "الشرقية", "المنوفية", "الغربية", "القليوبية", "الاسكندرية", "البحيرة", "كفر الشيخ", "السويس", "الاسماعيلية", "بني سويف", "الفيوم"];
+
+            
+            if (!validDeviceValues.includes(deviceSelect.value) || !validCityValues.includes(citySelect.value)) {
+                alert("Please select valid values for device and city before submitting the form.");
+                event.preventDefault(); 
+            }
+        });
+    });
+</script>
                               <div class="form-group">
                                 <label for="serial_number">رقم الايصال: </label>
                                 <input type="text" name="serial_number" id="serial_number" class="form-control" required maxlength="16">
@@ -1428,6 +1448,31 @@ function checkInput(inputElement) {
                                 <label for="issue">العطل:</label>
                                 <textarea name="issue" id="issue" class="form-control" required maxlength="100" rows="4" placeholder="( 100 ) حرف كحد اقصي .....  ||   او  كتابة رقم ارضي للتواصل"></textarea>
                             </div>
+                            <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var formInputs = document.querySelectorAll('input, textarea');
+
+        formInputs.forEach(function(input) {
+            input.addEventListener("input", function() {
+                var inputValue = input.value;
+
+                // Check for 'http://' or 'https://'
+                if (inputValue.includes('http://') || inputValue.includes('https://')) {
+                    alert("Please do not enter URLs in the input fields.");
+                    input.value = ''; // Clear the input
+                    return;
+                }
+
+                // Check for HTML tags or SQL symbols
+                var regex = /(<([^>]+)>|\b(?:SELECT|INSERT|UPDATE|DELETE|FROM|WHERE)\b)/ig;
+                if (regex.test(inputValue)) {
+                    alert("OOh No , Please do not enter that");
+                    input.value = ''; // Clear the input
+                }
+            });
+        });
+    });
+</script>
                             <button type="submit"  class="btn btn-primary" name="submit_form" style="margin-right: 23%;width: 77%;">إرسال</button>
 
                         </form>
@@ -1783,6 +1828,26 @@ function checkInput(inputElement) {
                                     <option value="الفيوم">الفيوم</option>
                                 </select>
                             </div>
+                              <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var form = document.querySelector(".my-form");
+
+        form.addEventListener("submit", function(event) {
+            var deviceSelect = document.getElementById("device");
+            var citySelect = document.getElementById("city");
+
+            
+            var validDeviceValues = ["ثلاجة", "غسالات ملابس", "غسالات اطباق", "ميكروويف", "تكييف", "ديب فريزر", "مجفف - دراير", "لاندري", "ايس ميكر"];
+            var validCityValues = ["الجيزة", "القاهرة", "الدقهلية", "الشرقية", "المنوفية", "الغربية", "القليوبية", "الاسكندرية", "البحيرة", "كفر الشيخ", "السويس", "الاسماعيلية", "بني سويف", "الفيوم"];
+
+            
+            if (!validDeviceValues.includes(deviceSelect.value) || !validCityValues.includes(citySelect.value)) {
+                alert("Please select valid values for device and city before submitting the form.");
+                event.preventDefault(); 
+            }
+        });
+    });
+</script>
                             <div class="form-group">
                                 <label for="address">العنوان:</label>
                                 <input type="text" name="address" id="address" autocomplete="on" class="form-control" required maxlength="40">
@@ -1792,6 +1857,31 @@ function checkInput(inputElement) {
                                   <textarea name="issue" id="issue" class="form-control" required maxlength="100" rows="4" placeholder="( 100 ) حرف كحد اقصي .....  ||   او  كتابة رقم ارضي للتواصل"></textarea>
 
                             </div>
+                            <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var formInputs = document.querySelectorAll('input, textarea');
+
+        formInputs.forEach(function(input) {
+            input.addEventListener("input", function() {
+                var inputValue = input.value;
+
+                // Check for 'http://' or 'https://'
+                if (inputValue.includes('http://') || inputValue.includes('https://')) {
+                    alert("Please do not enter URLs in the input fields.");
+                    input.value = ''; // Clear the input
+                    return;
+                }
+
+                // Check for HTML tags or SQL symbols
+                var regex = /(<([^>]+)>|\b(?:SELECT|INSERT|UPDATE|DELETE|FROM|WHERE)\b)/ig;
+                if (regex.test(inputValue)) {
+                    alert("OOh No , Please do not enter that");
+                    input.value = ''; // Clear the input
+                }
+            });
+        });
+    });
+</script>
 
                             <button type="submit" class="btn btn-primary" name="submit_form" style="margin-right: 23%;width: 77%;">إرسال</button>
                         </form>
