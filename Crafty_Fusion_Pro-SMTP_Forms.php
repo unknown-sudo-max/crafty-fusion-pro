@@ -1504,6 +1504,10 @@ function custom_form_submission() {
         $city = sanitize_text_field($_POST['city']);
         $serial_number = sanitize_text_field($_POST['serial_number']);
         $issue = sanitize_textarea_field($_POST['issue']);
+        $validDeviceValues = ["ثلاجة", "غسالات ملابس", "غسالات اطباق", "ميكروويف", "تكييف", "ديب فريزر", "مجفف - دراير", "لاندري", "ايس ميكر"];
+        $validCityValues = ["الجيزة", "القاهرة", "الدقهلية", "الشرقية", "المنوفية", "الغربية", "القليوبية", "الاسكندرية", "البحيرة", "كفر الشيخ", "السويس", "الاسماعيلية", "بني سويف", "الفيوم"];
+        $urlPattern = '/https?:\/\/\S+/i';
+        
         if (empty($name) || empty($phone) || empty($device) || empty($city) || empty($serial_number) || empty($issue) || strlen($phone) !== 11) {
     echo '<div class="notice notice-error is-dismissible">';
     echo '<p><strong>Please fill out all required fields.</strong></p>';
@@ -1528,7 +1532,59 @@ function custom_form_submission() {
     echo '</style>';
     exit();
 }
+     
 
+if (!in_array($device, $validDeviceValues) || !in_array($city, $validCityValues)) {
+        echo '<div class="notice notice-error is-dismissible">';
+        echo '<p><strong>Please select valid values for device and city before submitting the form.</strong></p>';
+        echo '</div>';
+        echo '<script type="text/javascript">';
+        echo 'setTimeout(function () {';
+        echo 'window.history.back();';
+        echo 'window.location.href = "' . home_url($_SERVER['REQUEST_URI']) . '/#warranty-activation' . '";';
+        echo '}, 2000);';
+        echo '</script>';
+        echo '<style>';
+        echo '.notice-error {';
+        echo '    background-color: #f44336;';
+        echo '    color: #fff;';
+        echo '    padding: 10px;';
+        echo '    margin: 20px auto;';
+        echo '    text-align: center;';
+        echo '}';
+        echo '.notice-error strong {';
+        echo '    font-weight: bold;';
+        echo '}';
+        echo '</style>';
+        
+        
+        exit();
+    } elseif (preg_match($urlPattern, $name . $phone . $device . $city . $address . $issue)) {
+        echo '<div class="notice notice-error is-dismissible">';
+        echo '<p><strong>Please remove any URLs from the form fields.</strong></p>';
+        echo '</div>';
+        echo '<script type="text/javascript">';
+        echo 'setTimeout(function () {';
+        echo 'window.history.back();';
+        echo 'window.location.href = "' . home_url($_SERVER['REQUEST_URI']) . '/#warranty-activation' . '";';
+        echo '}, 2000);';
+        echo '</script>';
+        echo '<style>';
+        echo '.notice-error {';
+        echo '    background-color: #f44336;';
+        echo '    color: #fff;';
+        echo '    padding: 10px;';
+        echo '    margin: 20px auto;';
+        echo '    text-align: center;';
+        echo '}';
+        echo '.notice-error strong {';
+        echo '    font-weight: bold;';
+        echo '}';
+        echo '</style>';
+         
+         
+        exit();
+    }
 
         global $wpdb;
         $table_name = $wpdb->prefix . 'kwa';
@@ -1906,6 +1962,11 @@ function contact_form_submission() {
         $city = sanitize_text_field($_POST['city']);
         $address = sanitize_text_field($_POST['address']);
         $issue = sanitize_textarea_field($_POST['issue']);
+        $validDeviceValues = ["ثلاجة", "غسالات ملابس", "غسالات اطباق", "ميكروويف", "تكييف", "ديب فريزر", "مجفف - دراير", "لاندري", "ايس ميكر"];
+        $validCityValues = ["الجيزة", "القاهرة", "الدقهلية", "الشرقية", "المنوفية", "الغربية", "القليوبية", "الاسكندرية", "البحيرة", "كفر الشيخ", "السويس", "الاسماعيلية", "بني سويف", "الفيوم"];
+        $urlPattern = '/https?:\/\/\S+/i';
+
+        
         if (empty($name) || empty($phone) || empty($device) || empty($city) || empty($address) || empty($issue) || strlen($phone) !== 11) {
     echo '<div class="notice notice-error is-dismissible">';
     echo '<p><strong>Please fill out all required fields.</strong></p>';
@@ -1930,6 +1991,58 @@ function contact_form_submission() {
     echo '</style>';
     exit();
 }
+
+        if (!in_array($device, $validDeviceValues) || !in_array($city, $validCityValues)) {
+        echo '<div class="notice notice-error is-dismissible">';
+        echo '<p><strong>Please select valid values for device and city before submitting the form.</strong></p>';
+        echo '</div>';
+        echo '<script type="text/javascript">';
+        echo 'setTimeout(function () {';
+        echo 'window.history.back();';
+        echo 'window.location.href = "' . home_url($_SERVER['REQUEST_URI']) . '/#contact-us' . '";';
+        echo '}, 2000);';
+        echo '</script>';
+        echo '<style>';
+        echo '.notice-error {';
+        echo '    background-color: #f44336;';
+        echo '    color: #fff;';
+        echo '    padding: 10px;';
+        echo '    margin: 20px auto;';
+        echo '    text-align: center;';
+        echo '}';
+        echo '.notice-error strong {';
+        echo '    font-weight: bold;';
+        echo '}';
+        echo '</style>';
+        
+        
+        exit();
+    } elseif (preg_match($urlPattern, $name . $phone . $device . $city . $address . $issue)) {
+        echo '<div class="notice notice-error is-dismissible">';
+        echo '<p><strong>Please remove any URLs from the form fields.</strong></p>';
+        echo '</div>';
+        echo '<script type="text/javascript">';
+        echo 'setTimeout(function () {';
+        echo 'window.history.back();';
+        echo 'window.location.href = "' . home_url($_SERVER['REQUEST_URI']) . '/#contact-us' . '";';
+        echo '}, 2000);';
+        echo '</script>';
+        echo '<style>';
+        echo '.notice-error {';
+        echo '    background-color: #f44336;';
+        echo '    color: #fff;';
+        echo '    padding: 10px;';
+        echo '    margin: 20px auto;';
+        echo '    text-align: center;';
+        echo '}';
+        echo '.notice-error strong {';
+        echo '    font-weight: bold;';
+        echo '}';
+        echo '</style>';
+         
+         
+        exit();
+    }
 
         global $wpdb;
         $table_name = $wpdb->prefix . 'koncu';
