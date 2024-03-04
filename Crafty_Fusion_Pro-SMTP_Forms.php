@@ -1659,6 +1659,12 @@ add_action('admin_post_nopriv_submit_form', 'custom_form_submission');
 function custom_form_display_with_category() {
     ob_start();
     ?>
+    <style>
+        .post-details{
+        text-align : right;
+        }
+    </style>
+
     <div id="catprimary" class="content-area">
         <main id="main" class="site-main">
             <div class="container">
