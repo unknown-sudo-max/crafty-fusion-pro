@@ -9,7 +9,7 @@ function custom_user_creator_menu() {
         'users.php', // Parent menu slug (Users)
         'Create User',
         'Create User',
-        'manage_options',
+        'read',
         'custom-user-creator',
         'custom_user_creator_page'
     );
