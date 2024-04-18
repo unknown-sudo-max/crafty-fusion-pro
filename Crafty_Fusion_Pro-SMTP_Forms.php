@@ -2172,7 +2172,6 @@ function create_custom_tables() {
     dbDelta($sql2);
 }
 
-
 // Hook the table creation function to the plugin activation
 register_activation_hook(__FILE__, 'create_custom_tables');
 
