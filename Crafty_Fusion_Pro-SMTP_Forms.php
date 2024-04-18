@@ -2139,9 +2139,9 @@ function create_custom_tables() {
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
 
-    // Create first table wp_kwa
+    // Create or update first table wp_kwa
     $table_name1 = $wpdb->prefix . 'kwa';
-    $sql1 = "CREATE TABLE $table_name1 (
+    $sql1 = "CREATE TABLE IF NOT EXISTS $table_name1 (
         id INT NOT NULL AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
         phone VARCHAR(15) NOT NULL,
@@ -2156,9 +2156,9 @@ function create_custom_tables() {
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql1);
 
-    // Create second table wp_koncu
+    // Create or update second table wp_koncu
     $table_name2 = $wpdb->prefix . 'koncu';
-    $sql2 = "CREATE TABLE $table_name2 (
+    $sql2 = "CREATE TABLE IF NOT EXISTS $table_name2 (
         id INT NOT NULL AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
         phone VARCHAR(15) NOT NULL,
@@ -2171,6 +2171,7 @@ function create_custom_tables() {
     ) $charset_collate;";
     dbDelta($sql2);
 }
+
 
 // Hook the table creation function to the plugin activation
 register_activation_hook(__FILE__, 'create_custom_tables');
