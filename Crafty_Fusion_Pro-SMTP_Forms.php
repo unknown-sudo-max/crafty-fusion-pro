@@ -1510,6 +1510,7 @@ function custom_form_submission() {
         $device = sanitize_text_field($_POST['device']);
         $city = sanitize_text_field($_POST['city']);
         $serial_number = sanitize_text_field($_POST['serial_number']);
+        $total_cost = sanitize_text_field($_POST['total_cost']);
         $issue = sanitize_textarea_field($_POST['issue']);
         $validDeviceValues = ["ثلاجة", "غسالات ملابس", "غسالات اطباق", "ميكروويف", "تكييف", "ديب فريزر", "مجفف - دراير", "لاندري", "ايس ميكر"];
         $validCityValues = ["الجيزة", "القاهرة", "الدقهلية", "الشرقية", "المنوفية", "الغربية", "القليوبية", "الاسكندرية", "البحيرة", "كفر الشيخ", "السويس", "الاسماعيلية", "بني سويف", "الفيوم"];
