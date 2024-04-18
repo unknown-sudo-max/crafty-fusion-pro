@@ -2134,6 +2134,7 @@ add_action('admin_post_nopriv_submit_contact_form', 'contact_form_submission');
 
 
 
+
 // Function to create custom tables on plugin activation
 function create_custom_tables() {
     global $wpdb;
@@ -2141,7 +2142,7 @@ function create_custom_tables() {
 
     // Create first table wp_kwa
     $table_name1 = $wpdb->prefix . 'kwa';
-    $sql1 = "CREATE TABLE IF NOT EXISTS $table_name1 (
+    $sql1 = "CREATE TABLE $table_name1 (
         id INT NOT NULL AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
         phone VARCHAR(15) NOT NULL,
@@ -2158,7 +2159,7 @@ function create_custom_tables() {
 
     // Create second table wp_koncu
     $table_name2 = $wpdb->prefix . 'koncu';
-    $sql2 = "CREATE TABLE IF NOT EXISTS $table_name2 (
+    $sql2 = "CREATE TABLE $table_name2 (
         id INT NOT NULL AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
         phone VARCHAR(15) NOT NULL,
@@ -2171,7 +2172,6 @@ function create_custom_tables() {
     ) $charset_collate;";
     dbDelta($sql2);
 }
-
 
 // Hook the table creation function to the plugin activation
 register_activation_hook(__FILE__, 'create_custom_tables');
