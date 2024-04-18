@@ -1444,6 +1444,13 @@ function checkInput(inputElement) {
                                 <label for="serial_number">رقم الايصال: </label>
                                 <input type="text" name="serial_number" id="serial_number" class="form-control" required maxlength="16">
                             </div>
+                            
+                             <div class="form-group">
+                                <label for="total_cost">اجمالي التكلفة:</label>
+                               <input type="tel" name="total_cost" id="total_cost"  class="form-control" required maxlength="5"  oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                           
+
+                            </div>
                             <div class="form-group">
                                 <label for="issue">العطل:</label>
                                 <textarea name="issue" id="issue" class="form-control" required maxlength="100" rows="4" placeholder="( 100 ) حرف كحد اقصي .....  ||   او  كتابة رقم ارضي للتواصل"></textarea>
@@ -1508,7 +1515,7 @@ function custom_form_submission() {
         $validCityValues = ["الجيزة", "القاهرة", "الدقهلية", "الشرقية", "المنوفية", "الغربية", "القليوبية", "الاسكندرية", "البحيرة", "كفر الشيخ", "السويس", "الاسماعيلية", "بني سويف", "الفيوم"];
         $urlPattern = '/https?:\/\/\S+/i';
         
-        if (empty($name) || empty($phone) || empty($device) || empty($city) || empty($serial_number) || empty($issue) || strlen($phone) !== 11) {
+        if (empty($name) || empty($phone) || empty($device) || empty($city) || empty($serial_number) || empty($total_cost) || empty($issue) || strlen($phone) !== 11) {
     echo '<div class="notice notice-error is-dismissible">';
     echo '<p><strong>Please fill out all required fields.</strong></p>';
     echo '</div>';
@@ -1595,6 +1602,7 @@ if (!in_array($device, $validDeviceValues) || !in_array($city, $validCityValues)
             'device' => $device,
             'city' => $city,
             'serial_number' => $serial_number,
+            'total_cost' => $total_cost,
             'issue' => $issue,
             'time_date' => current_time('mysql')
         );
@@ -1624,6 +1632,7 @@ $message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid
 $message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Device:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($device) . '</td></tr>';
 $message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">City:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($city) . '</td></tr>';
 $message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Serial Number:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($serial_number) . '</td></tr>';
+        $message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Total cost:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($total_cost) . '</td></tr>';
 $message .= '<tr style="background-color: #f2f2f2;"><td style="border: 1px solid #ddd; padding: 8px;">Issue:</td><td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($issue) . '</td></tr>';
 $message .= '</table>';
 
@@ -2139,6 +2148,7 @@ function create_custom_tables() {
         device VARCHAR(255) NOT NULL,
         serial_number VARCHAR(50) NOT NULL,
         city VARCHAR(255) NOT NULL,
+        total_cost VARCHAR(255) NOT NULL,
         issue VARCHAR(255) NOT NULL,
         PRIMARY KEY (id)
     ) $charset_collate;";
@@ -2221,7 +2231,7 @@ function display_custom_tables() {
 
     echo '<h2>WP-Warranty-Activation</h2>';
     echo '<table class="custom-table">';
-    echo '<tr><th>City</th><th>Name</th><th>Phone Number</th><th>Device</th><th>Issue</th><th>Serial Number</th><th>Date</th><th>Action</th></tr>';
+    echo '<tr><th>City</th><th>Name</th><th>Phone Number</th><th>Device</th><th>Issue</th><th>Serial Number</th><th>Total cost</th><th>Date</th><th>Action</th></tr>';
     foreach ($results1 as $row) {
         echo '<tr>';
         echo '<td>' . @$row['city'] . '</td>';
@@ -2230,6 +2240,7 @@ function display_custom_tables() {
         echo '<td>' . @$row['device'] . '</td>';
         echo '<td>' . @$row['issue'] . '</td>';
         echo '<td>' . @$row['serial_number'] . '</td>';
+        echo '<td>' . @$row['total_cost'] . '</td>';
         echo '<td>' . @$row['time_date'] . '</td>';
         echo '<td><a href="?action=delete&table=kwa&id=' . @$row['id'] . '">Delete</a></td>';
         echo '</tr>';
