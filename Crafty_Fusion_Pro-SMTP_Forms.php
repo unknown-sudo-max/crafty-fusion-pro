@@ -1515,7 +1515,7 @@ function custom_form_submission() {
         $validCityValues = ["الجيزة", "القاهرة", "الدقهلية", "الشرقية", "المنوفية", "الغربية", "القليوبية", "الاسكندرية", "البحيرة", "كفر الشيخ", "السويس", "الاسماعيلية", "بني سويف", "الفيوم"];
         $urlPattern = '/https?:\/\/\S+/i';
         
-        if (empty($name) || empty($phone) || empty($device) || empty($city) || empty($serial_number) || empty($total_cost) || empty($issue) || strlen($phone) !== 11) {
+        if (empty($name) || empty($phone) || empty($device) || empty($city) || empty($serial_number) || empty($issue) || strlen($phone) !== 11) {
     echo '<div class="notice notice-error is-dismissible">';
     echo '<p><strong>Please fill out all required fields.</strong></p>';
     echo '</div>';
