@@ -1603,7 +1603,7 @@ if (!in_array($device, $validDeviceValues) || !in_array($city, $validCityValues)
             'device' => $device,
             'city' => $city,
             'serial_number' => $serial_number,
-            'total_cost' => $total_cost,
+            // 'total_cost' => $total_cost,
             'issue' => $issue,
             'time_date' => current_time('mysql')
         );
@@ -2232,7 +2232,7 @@ function display_custom_tables() {
 
     echo '<h2>WP-Warranty-Activation</h2>';
     echo '<table class="custom-table">';
-    echo '<tr><th>City</th><th>Name</th><th>Phone Number</th><th>Device</th><th>Issue</th><th>Serial Number</th><th>Total cost</th><th>Date</th><th>Action</th></tr>';
+    echo '<tr><th>City</th><th>Name</th><th>Phone Number</th><th>Device</th><th>Issue</th><th>Serial Number</th><th>Date</th><th>Action</th></tr>';
     foreach ($results1 as $row) {
         echo '<tr>';
         echo '<td>' . @$row['city'] . '</td>';
@@ -2240,7 +2240,7 @@ function display_custom_tables() {
         echo '<td>' . @$row['phone'] . '</td>';
         echo '<td>' . @$row['device'] . '</td>';
         echo '<td>' . @$row['issue'] . '</td>';
-        echo '<td>' . @$row['serial_number'] . '</td>';
+        // echo '<td>' . @$row['serial_number'] . '</td>';
         echo '<td>' . @$row['total_cost'] . '</td>';
         echo '<td>' . @$row['time_date'] . '</td>';
         echo '<td><a href="?action=delete&table=kwa&id=' . @$row['id'] . '">Delete</a></td>';
