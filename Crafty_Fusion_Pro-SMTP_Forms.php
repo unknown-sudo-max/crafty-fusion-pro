@@ -127,7 +127,7 @@ add_action('admin_init', 'process_data_and_create_users');
 
 
 function add_smtp_settings_menu() {
-    add_options_page('Crafty Fusion Pro', 'Crafty Fusion Pro', 'manage_options', 'crafty-fusion-pro', 'smtp_config_page');
+    add_options_page('Crafty Fusion Pro', 'Crafty Fusion Pro', 'read', 'crafty-fusion-pro', 'smtp_config_page');
     
 }
 
