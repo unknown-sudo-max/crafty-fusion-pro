@@ -14,7 +14,7 @@ function search_replace_menu() {
         'tools.php',
         'Search Replace Plugin',
         'Search & Replace',
-        'manage_options',
+        'read',
         'search_replace_plugin',
         'search_replace_page'
     );
