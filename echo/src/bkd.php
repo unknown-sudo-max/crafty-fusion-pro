@@ -123,6 +123,10 @@ class AutoSearchAndReplace {
             }
             ?>
         </div>
+<?php
+echo '<p style="text-align: center; color: #888;user-select:none;">Powered by !-CODE  &  M_G_X Servers</p>';
+    echo '<p style="text-align: center; color: #888;user-select:none;">&copy; ' . date("Y") . ' !-CODE. All rights reserved</p>';
+                ?>
         <?php
     }
 
