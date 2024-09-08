@@ -2665,7 +2665,7 @@ function chat_widget_html() {
     <div id="chat-widget" class="chat-widget">
         <a href="<?php echo $email; ?>" target="_blank" class="chat-icon email-icon" title="URL"></a>
         <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="chat-icon whatsapp-icon" title="WhatsApp"></a>
-        <a href="tel:<?php echo $phone_number; ?>" target="_blank" class="chat-icon phone-icon" title="Phone"></a>
+        <a href="tel:+<?php echo $phone_number; ?>" target="_blank" class="chat-icon phone-icon" title="Phone"></a>
         <button id="toggle-chat-widget-btn" class="toggle-btn">X</button>
     </div>
 
