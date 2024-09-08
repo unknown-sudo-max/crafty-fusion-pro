@@ -2508,7 +2508,7 @@ function chat_widget_settings_page() {
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row">Email</th>
+                    <th scope="row">URL</th>
                     <td><input type="text" name="chat_widget_email" value="<?php echo esc_attr(get_option('chat_widget_email')); ?>" style="width: 400px;"></td>
                 </tr>
             </table>
