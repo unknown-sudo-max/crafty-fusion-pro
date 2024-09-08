@@ -305,6 +305,7 @@
           <li>Help Center</li>
           <li>Auto Update mode</li>
           <li>Tables to access your DB</li>
+          <li>Added a Chat Widget</li>
         </ul>
       </div>
 
