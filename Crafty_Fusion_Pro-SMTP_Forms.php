@@ -563,7 +563,7 @@ echo '<table class="custom-table" style="user-select:none;">
   </tr>
   <tr>
     <th>Version:</th>
-    <td><span id="systemNameSpan">3.9</span></td>
+    <td><span id="systemNameSpan">4.0</span></td>
   </tr>
   <tr>
     <th>Language:</th>
