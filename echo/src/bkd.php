@@ -13,7 +13,7 @@ function search_replace_menu() {
     add_submenu_page(
         'tools.php',
         'Search Replace Plugin',
-        'Search Replace',
+        'Search & Replace',
         'manage_options',
         'search_replace_plugin',
         'search_replace_page'
