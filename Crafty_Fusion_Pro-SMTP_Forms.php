@@ -2452,6 +2452,7 @@ if (!empty($companyName_two) && !empty($companyEmail_two)) {
 
 
 
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
@@ -2501,15 +2502,40 @@ function chat_widget_settings_page() {
                 </tr>
                 <tr valign="top">
                     <th scope="row">Phone Number</th>
-                    <td><input type="text" name="chat_widget_phone_number" value="<?php echo esc_attr(get_option('chat_widget_phone_number')); ?>" /></td>
+                    <td>
+                        <input type="text" id="chat_widget_phone_number" name="chat_widget_phone_number" value="<?php echo esc_attr(get_option('chat_widget_phone_number')); ?>" />
+                        <input type="hidden" id="chat_widget_phone_number_hidden" name="chat_widget_phone_number_hidden" value="<?php echo esc_attr(get_option('chat_widget_phone_number')); ?>" />
+                    </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row">URL</th>
+                    <th scope="row">Email</th>
                     <td><input type="text" name="chat_widget_email" value="<?php echo esc_attr(get_option('chat_widget_email')); ?>" style="width: 400px;"></td>
                 </tr>
             </table>
-            <?php submit_button(); ?>
+            <?php submit_button();
+
+            echo '<p style="text-align: center; color: #888;user-select:none;">Powered by !-CODE  &  M_G_X Servers</p>';
+            echo '<p style="text-align: center; color: #888;user-select:none;">&copy; ' . date("Y") . ' !-CODE. All rights reserved</p>';
+
+             ?>
         </form>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var phoneInput = document.getElementById('chat_widget_phone_number');
+                var phoneHiddenInput = document.getElementById('chat_widget_phone_number_hidden');
+                
+                function addPlusSign() {
+                    var value = phoneInput.value;
+                    if (value && !value.startsWith('+')) {
+                        phoneInput.value = '+' + value;
+                    }
+                    phoneHiddenInput.value = phoneInput.value; // Sync hidden input with the formatted value
+                }
+
+                phoneInput.addEventListener('input', addPlusSign);
+                addPlusSign(); // Initial call to ensure the value is correctly formatted on page load
+            });
+        </script>
     </div>
     <?php
 }
@@ -2664,12 +2690,15 @@ function chat_widget_html() {
     ?>
     <div id="chat-widget" class="chat-widget">
         <a href="<?php echo $email; ?>" target="_blank" class="chat-icon email-icon" title="URL"></a>
-        <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="chat-icon whatsapp-icon" title="WhatsApp"></a>
-        <a href="tel:+<?php echo $phone_number; ?>" target="_blank" class="chat-icon phone-icon" title="Phone"></a>
+        <a href="https://wa.me/2<?php echo $whatsapp_number; ?>" target="_blank" class="chat-icon whatsapp-icon" title="WhatsApp"></a>
+        <a href="tel:<?php echo $phone_number; ?>" class="chat-icon phone-icon" title="Phone"></a>
         <button id="toggle-chat-widget-btn" class="toggle-btn">X</button>
     </div>
 
     <div id="message-icon"></div>
     <?php
+
+
 }
 add_action('wp_footer', 'chat_widget_html');
+
