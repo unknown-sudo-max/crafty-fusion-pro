@@ -2504,7 +2504,7 @@ function chat_widget_settings_page() {
                     <td><input type="text" name="chat_widget_phone_number" value="<?php echo esc_attr(get_option('chat_widget_phone_number')); ?>" /></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row">Email</th>
+                    <th scope="row">URL</th>
                     <td><input type="text" name="chat_widget_email" value="<?php echo esc_attr(get_option('chat_widget_email')); ?>" style="width: 400px;"></td>
                 </tr>
             </table>
@@ -2663,7 +2663,7 @@ function chat_widget_html() {
     $email = esc_attr(get_option('chat_widget_email'));
     ?>
     <div id="chat-widget" class="chat-widget">
-        <a href="<?php echo $email; ?>" target="_blank" class="chat-icon email-icon" title="Email"></a>
+        <a href="<?php echo $email; ?>" target="_blank" class="chat-icon email-icon" title="URL"></a>
         <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="chat-icon whatsapp-icon" title="WhatsApp"></a>
         <a href="tel:<?php echo $phone_number; ?>" class="chat-icon phone-icon" title="Phone"></a>
         <button id="toggle-chat-widget-btn" class="toggle-btn">X</button>
