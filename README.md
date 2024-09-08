@@ -270,7 +270,7 @@
       <div id="tab1" class="tab-content active">
         <h2>Crafty Fusion Pro</h2>
         <p>M_G_X Softwares</p>
-        <p><strong>Version:</strong> 3.9</p>
+        <p><strong>Version:</strong> 4.0</p>
         <p><strong>Author:</strong> !-CODE | M_G_X CEO & Founder</p>
         <p><strong>License:</strong> !-CODE LICENSE-AGREEMENT</p>
         <p><strong>Text-Domain:</strong> crafty-fusion-pro</p>
