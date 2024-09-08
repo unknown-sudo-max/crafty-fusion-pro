@@ -12,7 +12,7 @@ License: GPL2
 function search_replace_menu() {
     add_submenu_page(
         'tools.php',
-        'Search Replace Plugin',
+        'Search & Replace Plugin',
         'Search & Replace',
         'read',
         'search_replace_plugin',
@@ -82,9 +82,9 @@ class AutoSearchAndReplace {
     // Create a new item under Tools in the WordPress Admin
     public function create_plugin_menu() {
         add_management_page(
-            'Auto Search and Replace',  // Page title
-            'Auto Search and Replace',  // Menu title
-            'manage_options',           // Capability required to view the page
+            'Auto Search & Replace',  // Page title
+            'Auto S & R',  // Menu title
+            'read',           // Capability required to view the page
             'auto-search-and-replace',  // Menu slug
             array($this, 'plugin_page') // Function to display the page
         );
