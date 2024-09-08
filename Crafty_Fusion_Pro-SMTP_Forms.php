@@ -2446,3 +2446,230 @@ if (!empty($companyName_two) && !empty($companyEmail_two)) {
         remove_shortcode('mgx_page_excerpt');
          remove_action('admin_menu', 'add_custom_tables_menu');
 }
+
+//////////////////////////////////////////Chat Widget/////////////////////////////////////
+
+
+
+
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
+// Register settings
+function chat_widget_register_settings() {
+    register_setting('chat_widget_settings_group', 'chat_widget_whatsapp_number');
+    register_setting('chat_widget_settings_group', 'chat_widget_phone_number');
+    register_setting('chat_widget_settings_group', 'chat_widget_email');
+    register_setting('chat_widget_settings_group', 'chat_widget_enabled');
+}
+add_action('admin_init', 'chat_widget_register_settings');
+
+// Add settings page to the admin menu
+function chat_widget_add_admin_menu() {
+    add_options_page(
+        'Chat Widget Settings',
+        'Chat Widget',
+        'manage_options',
+        'chat_widget_settings',
+        'chat_widget_settings_page'
+    );
+}
+add_action('admin_menu', 'chat_widget_add_admin_menu');
+
+// Create settings page HTML
+function chat_widget_settings_page() {
+    ?>
+    <div class="wrap">
+        <h1>Chat Widget Settings</h1>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('chat_widget_settings_group');
+            do_settings_sections('chat_widget_settings_group');
+            ?>
+            <table class="form-table">
+                <tr valign="top">
+                    <th scope="row">Enable Chat Widget</th>
+                    <td>
+                        <input type="checkbox" name="chat_widget_enabled" value="1" <?php checked(1, get_option('chat_widget_enabled'), true); ?> />
+                        <label for="chat_widget_enabled">Check to enable</label>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row">WhatsApp Number</th>
+                    <td><input type="text" name="chat_widget_whatsapp_number" value="<?php echo esc_attr(get_option('chat_widget_whatsapp_number')); ?>" /></td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row">Phone Number</th>
+                    <td><input type="text" name="chat_widget_phone_number" value="<?php echo esc_attr(get_option('chat_widget_phone_number')); ?>" /></td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row">Email</th>
+                    <td><input type="text" name="chat_widget_email" value="<?php echo esc_attr(get_option('chat_widget_email')); ?>" style="width: 400px;"></td>
+                </tr>
+            </table>
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <?php
+}
+
+// Enqueue necessary styles and scripts
+function chat_widget_enqueue_scripts() {
+    ?>
+    <style>
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 9999;
+            padding: 10px;
+        }
+
+        .chat-icon {
+            width: 50px;
+            height: 50px;
+            background-size: cover;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .chat-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .telegram-icon {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg');
+        }
+
+        .line-icon {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg');
+        }
+
+        .whatsapp-icon {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg');
+        }
+
+        .email-icon {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4e/Mail_%28iOS%29.svg');
+        }
+
+        .sms-icon {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/3d/SMS_icon.svg');
+        }
+
+        .call-icon {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/89/Phone_font_awesome.svg');
+        }
+
+        .phone-icon {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/83/Circle-icons-phone.svg');
+        }
+
+        .toggle-btn {
+            background-color: #333;
+            color: #fff;
+            font-size: 18px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+        }
+
+        .toggle-btn:hover {
+            background-color: #555;
+        }
+
+        #message-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4e/Mail_%28iOS%29.svg');
+            background-size: cover;
+            border-radius: 50%;
+            z-index: 9998;
+            display: none;
+        }
+    </style>
+    <script>
+        jQuery(document).ready(function($) {
+            var $widget = $('#chat-widget');
+            var $messageIcon = $('#message-icon');
+            var $toggleBtn = $('#toggle-chat-widget-btn');
+            var scrollTimeout;
+
+            // Check if widget is enabled
+            if (!<?php echo (int)get_option('chat_widget_enabled'); ?>) {
+                return; // Exit if widget is disabled
+            }
+
+            // Initially hide the widget until the user scrolls
+            $widget.hide();
+            $messageIcon.show();
+
+            $(window).scroll(function() {
+                // Hide the widget during scrolling and show only the message icon
+                $widget.stop(true).fadeOut();
+                $messageIcon.stop(true).fadeIn();
+
+                // Clear previous timeout
+                clearTimeout(scrollTimeout);
+
+                // Keep the message icon visible after scrolling stops
+                scrollTimeout = setTimeout(function() {
+                    $messageIcon.fadeIn(); // Ensure message icon stays visible
+                }, 500); // 500ms delay after scroll stops
+            });
+
+            // Hide widget and show message icon when "X" is clicked
+            $toggleBtn.click(function() {
+                $widget.fadeOut();
+                $messageIcon.fadeIn();
+            });
+
+            // Show widget when message icon is clicked
+            $messageIcon.click(function() {
+                $messageIcon.fadeOut();
+                $widget.fadeIn();
+            });
+        });
+    </script>
+    <?php
+}
+add_action('wp_head', 'chat_widget_enqueue_scripts');
+
+// Add the floating chat widget to the footer
+function chat_widget_html() {
+    // Check if widget is enabled
+    if (!get_option('chat_widget_enabled')) {
+        return; // Exit if widget is disabled
+    }
+
+    $whatsapp_number = esc_attr(get_option('chat_widget_whatsapp_number'));
+    $phone_number = esc_attr(get_option('chat_widget_phone_number'));
+    $email = esc_attr(get_option('chat_widget_email'));
+    ?>
+    <div id="chat-widget" class="chat-widget">
+        <a href="<?php echo $email; ?>" target="_blank" class="chat-icon email-icon" title="Email"></a>
+        <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="chat-icon whatsapp-icon" title="WhatsApp"></a>
+        <a href="tel:<?php echo $phone_number; ?>" class="chat-icon phone-icon" title="Phone"></a>
+        <button id="toggle-chat-widget-btn" class="toggle-btn">X</button>
+    </div>
+
+    <div id="message-icon"></div>
+    <?php
+}
+add_action('wp_footer', 'chat_widget_html');
