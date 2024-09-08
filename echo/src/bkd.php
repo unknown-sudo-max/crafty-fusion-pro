@@ -1,12 +1,6 @@
 
 <?php
-/*
-Plugin Name: Find & Replace Plugin
-Description: A simple plugin to search and replace a word in the WordPress database.
-Version: 2.8
-Author: !- Code  By M_G_X CEO & Founder
-License: GPL2
-*/
+
 
 // Add a menu item under "Tools" menu
 function search_replace_menu() {
