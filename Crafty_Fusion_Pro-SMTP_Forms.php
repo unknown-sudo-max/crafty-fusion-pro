@@ -2620,7 +2620,7 @@ function chat_widget_enqueue_scripts() {
         #message-icon {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 20px;
             width: 60px;
             height: 60px;
             background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4e/Mail_%28iOS%29.svg');
