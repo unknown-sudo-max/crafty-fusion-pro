@@ -2547,7 +2547,7 @@ function chat_widget_enqueue_scripts() {
         .chat-widget {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
