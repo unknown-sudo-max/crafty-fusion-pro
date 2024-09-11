@@ -2453,6 +2453,8 @@ if (!empty($companyName_two) && !empty($companyEmail_two)) {
 
 
 
+
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
@@ -2643,34 +2645,34 @@ function chat_widget_enqueue_scripts() {
             }
 
             // Initially hide the widget until the user scrolls
-            $widget.hide();
-            $messageIcon.show();
+            // $widget.hide();
+            // $messageIcon.show();
 
-            $(window).scroll(function() {
-                // Hide the widget during scrolling and show only the message icon
-                $widget.stop(true).fadeOut();
-                $messageIcon.stop(true).fadeIn();
+            // $(window).scroll(function() {
+            //     // Hide the widget during scrolling and show only the message icon
+            //     $widget.stop(true).fadeOut();
+            //     $messageIcon.stop(true).fadeIn();
 
-                // Clear previous timeout
-                clearTimeout(scrollTimeout);
+            //     // Clear previous timeout
+            //     clearTimeout(scrollTimeout);
 
-                // Keep the message icon visible after scrolling stops
-                scrollTimeout = setTimeout(function() {
-                    $messageIcon.fadeIn(); // Ensure message icon stays visible
-                }, 500); // 500ms delay after scroll stops
-            });
+            //     // Keep the message icon visible after scrolling stops
+            //     scrollTimeout = setTimeout(function() {
+            //         $messageIcon.fadeIn(); // Ensure message icon stays visible
+            //     }, 500); // 500ms delay after scroll stops
+            // });
 
-            // Hide widget and show message icon when "X" is clicked
-            $toggleBtn.click(function() {
-                $widget.fadeOut();
-                $messageIcon.fadeIn();
-            });
+            // // Hide widget and show message icon when "X" is clicked
+            // $toggleBtn.click(function() {
+            //     $widget.fadeOut();
+            //     $messageIcon.fadeIn();
+            // });
 
-            // Show widget when message icon is clicked
-            $messageIcon.click(function() {
-                $messageIcon.fadeOut();
-                $widget.fadeIn();
-            });
+            // // Show widget when message icon is clicked
+            // $messageIcon.click(function() {
+            //     $messageIcon.fadeOut();
+            //     $widget.fadeIn();
+            // });
         });
     </script>
     <?php
@@ -2692,10 +2694,10 @@ function chat_widget_html() {
         <a href="<?php echo $email; ?>" target="_blank" class="chat-icon email-icon" title="URL"></a>
         <a href="https://wa.me/<?php echo $whatsapp_number; ?>" target="_blank" class="chat-icon whatsapp-icon" title="WhatsApp"></a>
         <a href="tel:<?php echo $phone_number; ?>" class="chat-icon phone-icon" title="Phone"></a>
-        <button id="toggle-chat-widget-btn" class="toggle-btn">X</button>
+       <!--  <button id="toggle-chat-widget-btn" class="toggle-btn">X</button> -->
     </div>
 
-    <div id="message-icon"></div>
+    <!-- <div id="message-icon"></div> -->
     <?php
 
 
