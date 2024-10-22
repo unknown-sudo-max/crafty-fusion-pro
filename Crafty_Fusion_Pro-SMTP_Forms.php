@@ -2174,7 +2174,8 @@ function create_custom_tables() {
 }
 
 // Hook the table creation function to the plugin activation
-register_activation_hook(__FILE__, 'create_custom_tables');
+//register_activation_hook(__FILE__, 'create_custom_tables');
+create_custom_tables();
 
 // Function to add a new tab in the WordPress dashboard menu
 function add_custom_tables_menu() {
