@@ -192,7 +192,7 @@ add_action('admin_menu', function () {
     add_options_page(
         'Simple Redirection',    // Page Title
         'Redirection 301',           // Menu Title
-        'manage_options',        // Capability
+        'read',        // Capability
         'CFP Redirection 301',    // Menu Slug
         function () {
             // Handle adding new redirect
