@@ -175,6 +175,7 @@ new AutoSearchAndReplace();
 
 
 
+
 // Activation Hook: Initialize options
 register_activation_hook(__FILE__, function () {
     add_option('simple_redirects', []);
@@ -191,9 +192,9 @@ register_deactivation_hook(__FILE__, function () {
 add_action('admin_menu', function () {
     add_options_page(
         'Simple Redirection',    // Page Title
-        'Redirection 301',           // Menu Title
+        'Redirection 301',       // Menu Title
         'manage_options',        // Capability
-        'CFP Redirection 301',    // Menu Slug
+        'CFP Redirection 301',   // Menu Slug
         function () {
             // Handle adding new redirect
             if ($_POST['action'] === 'add_redirect') {
@@ -226,7 +227,6 @@ add_action('admin_menu', function () {
             <div class="wrap">
                 <h1>Redirection 301</h1>
 
-               
                 <form method="post">
                     <input type="hidden" name="action" value="add_redirect">
                     <table class="form-table">
@@ -242,7 +242,6 @@ add_action('admin_menu', function () {
                     <button type="submit" class="button-primary">Add Redirect</button>
                 </form>
 
-               
                 <h2>Existing Redirects</h2>
                 <table class="wp-list-table widefat fixed striped">
                     <thead>
@@ -269,7 +268,6 @@ add_action('admin_menu', function () {
                     </tbody>
                 </table>
 
-                
                 <h2>Logged 404 Errors</h2>
                 <table class="wp-list-table widefat fixed striped">
                     <thead>
@@ -292,7 +290,6 @@ add_action('admin_menu', function () {
                     </tbody>
                 </table>
 
-               
                 <form method="post">
                     <input type="hidden" name="action" value="clear_404_logs">
                     <button type="submit" class="button-secondary" onclick="return confirm('Are you sure you want to clear all 404 logs?')">Clear 404 Logs</button>
@@ -300,12 +297,42 @@ add_action('admin_menu', function () {
             </div>
 
             <?php
-echo '<p style="text-align: center; color: #888;user-select:none;">Powered by !-CODE  &  M_G_X Servers</p>';
-echo '<p style="text-align: center; color: #888;user-select:none;">&copy; ' . date("Y") . ' !-CODE. All rights reserved</p>';
-
+            echo '<p style="text-align: center; color: #888; user-select:none;">Powered by !-CODE & M_G_X Servers</p>';
+            echo '<p style="text-align: center; color: #888; user-select:none;">&copy; ' . date("Y") . ' !-CODE. All rights reserved</p>';
         }
     );
 });
+
+// Add JavaScript for real-time conversion
+add_action('admin_footer', function () {
+    if (isset($_GET['page']) && $_GET['page'] === 'CFP Redirection 301') {
+        ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                function encodeArabic(url) {
+                    return url.split('').map(char => {
+                        // Check if the character is Arabic
+                        if (/[\u0600-\u06FF]/.test(char)) {
+                            return encodeURIComponent(char).toUpperCase();
+                        }
+                        return char; // Keep English letters, numbers, and safe characters unchanged
+                    }).join('');
+                }
+
+                const inputs = document.querySelectorAll('input[type="text"]');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', function () {
+                        if (this.value.trim() !== "") {
+                            this.value = encodeArabic(this.value.trim());
+                        }
+                    });
+                });
+            });
+        </script>
+        <?php
+    }
+});
+
 
 // Handle Redirects
 add_action('template_redirect', function () {
