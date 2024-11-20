@@ -193,15 +193,15 @@ add_action('admin_menu', function () {
     add_options_page(
         'Simple Redirection',    // Page Title
         'Redirection 301',       // Menu Title
-        'read',        // Capability
+        'manage_options',        // Capability
         'CFP Redirection 301',   // Menu Slug
         function () {
             // Handle adding new redirect
             if ($_POST['action'] === 'add_redirect') {
                 $redirects = get_option('simple_redirects', []);
                 $redirects[] = [
-                    'from' => esc_url_raw($_POST['from']), // Accept full URL
-                    'to'   => esc_url_raw($_POST['to']),   // Accept full URL
+                    'from' => esc_url_raw($_POST['from']),
+                    'to'   => esc_url_raw($_POST['to']),
                 ];
                 update_option('simple_redirects', $redirects);
             }
@@ -231,12 +231,12 @@ add_action('admin_menu', function () {
                     <input type="hidden" name="action" value="add_redirect">
                     <table class="form-table">
                         <tr>
-                            <th><label for="from">From URL (full):</label></th>
-                            <td><input type="url" name="from" id="from" required></td>
+                            <th><label for="from">From URL (relative):</label></th>
+                            <td><input type="text" name="from" id="from" required></td>
                         </tr>
                         <tr>
-                            <th><label for="to">To URL (full):</label></th>
-                            <td><input type="url" name="to" id="to" required></td>
+                            <th><label for="to">To URL:</label></th>
+                            <td><input type="text" name="to" id="to" required></td>
                         </tr>
                     </table>
                     <button type="submit" class="button-primary">Add Redirect</button>
@@ -297,28 +297,61 @@ add_action('admin_menu', function () {
             </div>
 
             <?php
+            echo '<p style="text-align: center; color: #888; user-select:none;">Powered by !-CODE & M_G_X Servers</p>';
+            echo '<p style="text-align: center; color: #888; user-select:none;">&copy; ' . date("Y") . ' !-CODE. All rights reserved</p>';
         }
     );
 });
 
-// Handle Redirects for Full URLs
+// Add JavaScript for real-time conversion
+add_action('admin_footer', function () {
+    if (isset($_GET['page']) && $_GET['page'] === 'CFP Redirection 301') {
+        ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                function encodeArabic(url) {
+                    return url.split('').map(char => {
+                        // Check if the character is Arabic
+                        if (/[\u0600-\u06FF]/.test(char)) {
+                            return encodeURIComponent(char).toUpperCase();
+                        }
+                        return char; // Keep English letters, numbers, and safe characters unchanged
+                    }).join('');
+                }
+
+                const inputs = document.querySelectorAll('input[type="text"]');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', function () {
+                        if (this.value.trim() !== "") {
+                            this.value = encodeArabic(this.value.trim());
+                        }
+                    });
+                });
+            });
+        </script>
+        <?php
+    }
+});
+
+
+// Handle Redirects
 add_action('template_redirect', function () {
     $redirects = get_option('simple_redirects', []);
-    $current_url = home_url($_SERVER['REQUEST_URI']); // Get the full current URL
+    $current_url = $_SERVER['REQUEST_URI'];
 
     foreach ($redirects as $redirect) {
-        if (trailingslashit($redirect['from']) === trailingslashit($current_url)) {
+        if ($redirect['from'] === $current_url) {
             wp_redirect($redirect['to'], 301);
             exit;
         }
     }
 });
 
-// Log 404 Errors with Full URL
+// Log 404 Errors
 add_action('wp', function () {
     if (is_404()) {
         $errors = get_option('simple_404_errors', []);
-        $current_url = home_url($_SERVER['REQUEST_URI']); // Get the full current URL
+        $current_url = $_SERVER['REQUEST_URI'];
 
         // Avoid duplicate logging
         if (!in_array($current_url, $errors)) {
@@ -327,5 +360,4 @@ add_action('wp', function () {
         }
     }
 });
-
 
