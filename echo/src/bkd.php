@@ -173,8 +173,7 @@ new AutoSearchAndReplace();
 
 //////////////////////////////////Redirection 301/////////////////////////////////
 
-<?php
-
+ 
 // Activation Hook: Initialize options
 register_activation_hook(__FILE__, function () {
     add_option('simple_redirects', []);
