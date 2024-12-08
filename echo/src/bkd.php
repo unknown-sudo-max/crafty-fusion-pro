@@ -175,17 +175,18 @@ new AutoSearchAndReplace();
 
 
 
-
 // Activation Hook: Initialize options
 register_activation_hook(__FILE__, function () {
     add_option('simple_redirects', []);
     add_option('simple_404_errors', []);
+    add_option('simple_redirection_enabled', true); // Default to enabled
 });
 
 // Deactivation Hook: Clean up options
 register_deactivation_hook(__FILE__, function () {
     delete_option('simple_redirects');
     delete_option('simple_404_errors');
+    delete_option('simple_redirection_enabled');
 });
 
 // Admin Menu for Redirection Plugin
@@ -193,10 +194,16 @@ add_action('admin_menu', function () {
     add_options_page(
         'Simple Redirection',    // Page Title
         'Redirection 301',       // Menu Title
-        'read',        // Capability
+        'manage_options',        // Capability
         'CFP Redirection 301',   // Menu Slug
         function () {
-            // Handle adding new redirect
+            // Handle toggling enable/disable
+            if ($_POST['action'] === 'toggle_redirection') {
+                $enabled = isset($_POST['enabled']) && $_POST['enabled'] === '1';
+                update_option('simple_redirection_enabled', $enabled);
+            }
+
+            // Handle other actions (add, delete redirects, clear logs)
             if ($_POST['action'] === 'add_redirect') {
                 $redirects = get_option('simple_redirects', []);
                 $redirects[] = [
@@ -206,12 +213,6 @@ add_action('admin_menu', function () {
                 update_option('simple_redirects', $redirects);
             }
 
-            // Handle clearing 404 logs
-            if ($_POST['action'] === 'clear_404_logs') {
-                delete_option('simple_404_errors');
-            }
-
-            // Handle deleting a specific redirect
             if ($_POST['action'] === 'delete_redirect') {
                 $redirects = get_option('simple_redirects', []);
                 $index = $_POST['index'];
@@ -220,12 +221,30 @@ add_action('admin_menu', function () {
                 update_option('simple_redirects', $redirects);
             }
 
-            // Display admin page content
+            if ($_POST['action'] === 'clear_404_logs') {
+                delete_option('simple_404_errors');
+            }
+
+            // Get the enable/disable status
+            $is_enabled = get_option('simple_redirection_enabled', true);
+
             $redirects = get_option('simple_redirects', []);
             $errors = get_option('simple_404_errors', []);
+
             ?>
             <div class="wrap">
                 <h1>Redirection 301</h1>
+
+                <form method="post">
+                    <input type="hidden" name="action" value="toggle_redirection">
+                    <label>
+                        <input type="checkbox" name="enabled" value="1" <?php checked($is_enabled); ?>>
+                        Enable Redirection
+                    </label>
+                    <button type="submit" class="button-primary">Save</button>
+                </form>
+
+                <hr>
 
                 <form method="post">
                     <input type="hidden" name="action" value="add_redirect">
@@ -295,47 +314,17 @@ add_action('admin_menu', function () {
                     <button type="submit" class="button-secondary" onclick="return confirm('Are you sure you want to clear all 404 logs?')">Clear 404 Logs</button>
                 </form>
             </div>
-
             <?php
-            echo '<p style="text-align: center; color: #888; user-select:none;">Powered by !-CODE & M_G_X Servers</p>';
-            echo '<p style="text-align: center; color: #888; user-select:none;">&copy; ' . date("Y") . ' !-CODE. All rights reserved</p>';
         }
     );
 });
 
-// Add JavaScript for real-time conversion
-add_action('admin_footer', function () {
-    if (isset($_GET['page']) && $_GET['page'] === 'CFP Redirection 301') {
-        ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                function encodeArabic(url) {
-                    return url.split('').map(char => {
-                        // Check if the character is Arabic
-                        if (/[\u0600-\u06FF]/.test(char)) {
-                            return encodeURIComponent(char).toUpperCase();
-                        }
-                        return char; // Keep English letters, numbers, and safe characters unchanged
-                    }).join('');
-                }
-
-                const inputs = document.querySelectorAll('input[type="text"]');
-                inputs.forEach(input => {
-                    input.addEventListener('blur', function () {
-                        if (this.value.trim() !== "") {
-                            this.value = encodeArabic(this.value.trim());
-                        }
-                    });
-                });
-            });
-        </script>
-        <?php
-    }
-});
-
-
 // Handle Redirects
 add_action('template_redirect', function () {
+    if (!get_option('simple_redirection_enabled', true)) {
+        return; // Skip if the plugin is disabled
+    }
+
     $redirects = get_option('simple_redirects', []);
     $current_url = $_SERVER['REQUEST_URI'];
 
@@ -349,11 +338,14 @@ add_action('template_redirect', function () {
 
 // Log 404 Errors
 add_action('wp', function () {
+    if (!get_option('simple_redirection_enabled', true)) {
+        return; // Skip if the plugin is disabled
+    }
+
     if (is_404()) {
         $errors = get_option('simple_404_errors', []);
         $current_url = $_SERVER['REQUEST_URI'];
 
-        // Avoid duplicate logging
         if (!in_array($current_url, $errors)) {
             $errors[] = $current_url;
             update_option('simple_404_errors', $errors);
