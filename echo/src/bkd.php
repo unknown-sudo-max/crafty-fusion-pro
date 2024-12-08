@@ -297,6 +297,36 @@ add_action('admin_menu', function () {
     );
 });
 
+// Add JavaScript for real-time conversion
+add_action('admin_footer', function () {
+    if (isset($_GET['page']) && $_GET['page'] === 'CFP Redirection 301') {
+        ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                function encodeArabic(url) {
+                    return url.split('').map(char => {
+                        // Check if the character is Arabic
+                        if (/[\u0600-\u06FF]/.test(char)) {
+                            return encodeURIComponent(char).toUpperCase();
+                        }
+                        return char; // Keep English letters, numbers, and safe characters unchanged
+                    }).join('');
+                }
+
+                const inputs = document.querySelectorAll('input[type="text"]');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', function () {
+                        if (this.value.trim() !== "") {
+                            this.value = encodeArabic(this.value.trim());
+                        }
+                    });
+                });
+            });
+        </script>
+        <?php
+    }
+});
+
 // Handle Redirects
 add_action('template_redirect', function () {
     if (!get_option('simple_redirection_enabled', true)) {
