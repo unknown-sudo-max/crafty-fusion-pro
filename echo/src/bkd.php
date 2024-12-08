@@ -291,6 +291,8 @@ add_action('admin_menu', function () {
                 
             </div>
             <?php
+             echo '<p style="text-align: center; color: #888; user-select:none;">Powered by !-CODE & M_G_X Servers</p>';
+            echo '<p style="text-align: center; color: #888; user-select:none;">&copy; ' . date("Y") . ' !-CODE. All rights reserved</p>';
         }
     );
 });
