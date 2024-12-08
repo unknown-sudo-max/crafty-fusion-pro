@@ -2560,8 +2560,8 @@ function chat_widget_enqueue_scripts() {
         }
 
         .chat-icon {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             background-size: cover;
             border-radius: 50%;
             transition: transform 0.2s;
