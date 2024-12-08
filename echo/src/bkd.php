@@ -175,6 +175,7 @@ new AutoSearchAndReplace();
 
 
 
+
 // Activation Hook: Initialize options
 register_activation_hook(__FILE__, function () {
     add_option('simple_redirects', []);
@@ -194,7 +195,7 @@ add_action('admin_menu', function () {
     add_options_page(
         'Simple Redirection',    // Page Title
         'Redirection 301',       // Menu Title
-        'manage_options',        // Capability
+        'read',        // Capability
         'CFP Redirection 301',   // Menu Slug
         function () {
             // Handle toggling enable/disable
@@ -287,32 +288,7 @@ add_action('admin_menu', function () {
                     </tbody>
                 </table>
 
-                <h2>Logged 404 Errors</h2>
-                <table class="wp-list-table widefat fixed striped">
-                    <thead>
-                        <tr>
-                            <th>Error URL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if ($errors): ?>
-                            <?php foreach ($errors as $error): ?>
-                                <tr>
-                                    <td><?php echo esc_html($error); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td>No 404 errors logged.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-
-                <form method="post">
-                    <input type="hidden" name="action" value="clear_404_logs">
-                    <button type="submit" class="button-secondary" onclick="return confirm('Are you sure you want to clear all 404 logs?')">Clear 404 Logs</button>
-                </form>
+                
             </div>
             <?php
         }
@@ -346,10 +322,7 @@ add_action('wp', function () {
         $errors = get_option('simple_404_errors', []);
         $current_url = $_SERVER['REQUEST_URI'];
 
-        if (!in_array($current_url, $errors)) {
-            $errors[] = $current_url;
-            update_option('simple_404_errors', $errors);
-        }
+        
     }
 });
 
