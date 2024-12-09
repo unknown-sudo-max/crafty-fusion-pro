@@ -321,6 +321,7 @@ add_action('admin_footer', function () {
                 const specialChars = {
                     '<': '%3C',
                     '>': '%3E',
+                    '"': '%22',
                     ';': '%3B'
                 };
 
