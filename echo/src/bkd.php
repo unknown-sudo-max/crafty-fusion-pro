@@ -322,6 +322,7 @@ add_action('admin_footer', function () {
                     '<': '%3C',
                     '>': '%3E',
                     '"': '%22',
+                    ' ': '%20',  // Encode space as %20
                     ';': '%3B'
                 };
 
