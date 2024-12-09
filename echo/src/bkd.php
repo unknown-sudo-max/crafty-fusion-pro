@@ -175,7 +175,6 @@ new AutoSearchAndReplace();
 
 
 
-
 // Activation Hook: Initialize options
 register_activation_hook(__FILE__, function () {
     add_option('simple_redirects', []);
@@ -207,9 +206,15 @@ add_action('admin_menu', function () {
             // Handle other actions (add, delete redirects, clear logs)
             if ($_POST['action'] === 'add_redirect') {
                 $redirects = get_option('simple_redirects', []);
+                
+                // Get the values from the form without encoding or decoding
+                $from_url = $_POST['from'];
+                $to_url = $_POST['to'];
+                
+                // Add the redirect to the list
                 $redirects[] = [
-                    'from' => esc_url_raw($_POST['from']),
-                    'to'   => esc_url_raw($_POST['to']),
+                    'from' => $from_url,
+                    'to'   => $to_url,
                 ];
                 update_option('simple_redirects', $redirects);
             }
@@ -288,44 +293,62 @@ add_action('admin_menu', function () {
                     </tbody>
                 </table>
 
-                
+              
             </div>
+
             <?php
-             echo '<p style="text-align: center; color: #888; user-select:none;">Powered by !-CODE & M_G_X Servers</p>';
+              echo '<p style="text-align: center; color: #888; user-select:none;">Powered by !-CODE & M_G_X Servers</p>';
             echo '<p style="text-align: center; color: #888; user-select:none;">&copy; ' . date("Y") . ' !-CODE. All rights reserved</p>';
         }
     );
 });
 
+
 // Add JavaScript for real-time conversion
 add_action('admin_footer', function () {
     if (isset($_GET['page']) && $_GET['page'] === 'CFP Redirection 301') {
         ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                function encodeArabic(url) {
-                    return url.split('').map(char => {
-                        // Check if the character is Arabic
-                        if (/[\u0600-\u06FF]/.test(char)) {
-                            return encodeURIComponent(char).toUpperCase();
-                        }
-                        return char; // Keep English letters, numbers, and safe characters unchanged
-                    }).join('');
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function encodeSpecialCharacters(url) {
+            return url.split('').map(char => {
+                // Check if the character is Arabic and encode it
+                if (/[\u0600-\u06FF]/.test(char)) {
+                    return encodeURIComponent(char).toUpperCase();
                 }
 
-                const inputs = document.querySelectorAll('input[type="text"]');
-                inputs.forEach(input => {
-                    input.addEventListener('blur', function () {
-                        if (this.value.trim() !== "") {
-                            this.value = encodeArabic(this.value.trim());
-                        }
-                    });
-                });
+                // Encode special characters like < and > to their respective URL-encoded values
+                const specialChars = {
+                    '<': '%3C',
+                    '>': '%3E',
+                    ';': '%3B'
+                };
+
+                // If the character is in the specialChars map, replace it
+                if (specialChars[char]) {
+                    return specialChars[char];
+                }
+
+                // Keep other characters unchanged (letters, numbers, etc.)
+                return char;
+            }).join('');
+        }
+
+        const inputs = document.querySelectorAll('input[type="text"]');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function () {
+                if (this.value.trim() !== "") {
+                    this.value = encodeSpecialCharacters(this.value.trim());
+                }
             });
-        </script>
+        });
+    });
+</script>
+
         <?php
     }
 });
+
 
 // Handle Redirects
 add_action('template_redirect', function () {
@@ -350,12 +373,7 @@ add_action('wp', function () {
         return; // Skip if the plugin is disabled
     }
 
-    if (is_404()) {
-        $errors = get_option('simple_404_errors', []);
-        $current_url = $_SERVER['REQUEST_URI'];
-
-        
-    }
+ 
 });
 
 
