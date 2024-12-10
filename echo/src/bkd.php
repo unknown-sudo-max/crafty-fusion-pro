@@ -378,4 +378,228 @@ add_action('wp', function () {
  
 });
 
+////////////////minifier///////////////////////
+
+
+
+class HTML_CSS_JS_Minifier_Plugin {
+    
+    public function __construct() {
+        add_action('init', [$this, 'init_hooks']);
+        add_action('admin_menu', [$this, 'add_admin_menu']);
+        add_action('admin_post_run_minifier', [$this, 'run_minifier']);
+    }
+
+    public function init_hooks() {
+        ob_start([$this, 'minify_content']);
+    }
+
+    public function minify_content($buffer) {
+        if (is_admin()) {
+            return $buffer;
+        }
+        
+        // Minify HTML
+        $original_html_size = strlen($buffer);
+        $minified_html = $this->html_minify($buffer);
+        $minified_html_size = strlen($minified_html);
+        $html_savings = $original_html_size - $minified_html_size;
+
+        // Minify CSS
+        preg_match_all('/<style.*?>(.*?)<\/style>/is', $minified_html, $css_matches);
+        $original_css_size = 0;
+        $minified_css_size = 0;
+        foreach ($css_matches[1] as $css) {
+            $original_css_size += strlen($css);
+            $minified_css = $this->css_minify($css);
+            $minified_css_size += strlen($minified_css);
+        }
+
+        // Minify JS
+        preg_match_all('/<script.*?>(.*?)<\/script>/is', $minified_html, $js_matches);
+        $original_js_size = 0;
+        $minified_js_size = 0;
+        foreach ($js_matches[1] as $js) {
+            $original_js_size += strlen($js);
+            $minified_js = $this->js_minify($js);
+            $minified_js_size += strlen($minified_js);
+        }
+
+        // Calculate savings
+        $total_savings = ($html_savings + $original_css_size - $minified_css_size + $original_js_size - $minified_js_size);
+
+        // Save the stats
+        update_option('minifier_stats', [
+            'html_original_size' => $original_html_size,
+            'html_minified_size' => $minified_html_size,
+            'html_savings' => $html_savings,
+            'css_original_size' => $original_css_size,
+            'css_minified_size' => $minified_css_size,
+            'js_original_size' => $original_js_size,
+            'js_minified_size' => $minified_js_size,
+            'total_savings' => $total_savings,
+            'total_percentage' => $this->calculate_percentage($original_html_size + $original_css_size + $original_js_size, $total_savings),
+        ]);
+
+        return $minified_html;
+    }
+
+    private function html_minify($html) {
+        $search = [
+            '/\>[^\S ]+/s',  // Remove spaces after tags
+            '/[^\S ]+\</s',  // Remove spaces before tags
+            '/(\s)+/s'       // Remove multiple spaces
+        ];
+        $replace = [
+            '>',
+            '<',
+            '\\1'
+        ];
+        return preg_replace($search, $replace, $html);
+    }
+
+    private function css_minify($css) {
+        // Basic CSS minification
+        $css = preg_replace('/\s+/s', ' ', $css); // Remove extra spaces
+        $css = preg_replace('/\s*([{}|:;,])\s*/', '$1', $css); // Remove spaces around symbols
+        $css = preg_replace('/\/\*.*?\*\//s', '', $css); // Remove comments
+        return trim($css);
+    }
+
+    private function js_minify($js) {
+        // Basic JS minification (you can use a library like JSMin or UglifyJS for more advanced features)
+        $js = preg_replace('/\s+/s', ' ', $js); // Remove extra spaces
+        $js = preg_replace('/\s*([{}|:;,])\s*/', '$1', $js); // Remove spaces around symbols
+        $js = preg_replace('/\/\*.*?\*\//s', '', $js); // Remove comments
+        return trim($js);
+    }
+
+    private function calculate_percentage($original_size, $savings) {
+        if ($original_size > 0) {
+            return round(($savings / $original_size) * 100, 2);
+        }
+        return 0;
+    }
+
+    public function add_admin_menu() {
+        add_menu_page(
+            'Minifier',
+            'Minifier',
+            'read',
+            'minifier',
+            [$this, 'admin_page'],
+            'dashicons-analytics',
+            100
+        );
+    }
+
+    public function admin_page() {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        $stats = get_option('minifier_stats', [
+            'html_original_size' => 0,
+            'html_minified_size' => 0,
+            'html_savings' => 0,
+            'css_original_size' => 0,
+            'css_minified_size' => 0,
+            'js_original_size' => 0,
+            'js_minified_size' => 0,
+            'total_savings' => 0,
+            'total_percentage' => 0
+        ]);
+
+        echo '<div class="wrap">';
+        echo '<h1>HTML, CSS, and JS Minifier</h1>';
+        echo '<p><strong>HTML:</strong> ' . esc_html($stats['html_savings']) . ' bytes saved (' . esc_html($this->calculate_percentage($stats['html_original_size'], $stats['html_savings'])) . '%)</p>';
+        echo '<p><strong>CSS:</strong> ' . esc_html($stats['css_original_size'] - $stats['css_minified_size']) . ' bytes saved</p>';
+        echo '<p><strong>JS:</strong> ' . esc_html($stats['js_original_size'] - $stats['js_minified_size']) . ' bytes saved</p>';
+        echo '<p><strong>Total Savings:</strong> ' . esc_html($stats['total_savings']) . ' bytes (' . esc_html($stats['total_percentage']) . '%)</p>';
+        echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
+        echo '<input type="hidden" name="action" value="run_minifier">';
+        submit_button('Run Minifier');
+        echo '</form>';
+        echo '</div>';
+    }
+
+    public function run_minifier() {
+        global $wpdb;
+
+        $total_html_original_size = 0;
+        $total_html_minified_size = 0;
+        $total_html_savings = 0;
+        $total_css_original_size = 0;
+        $total_css_minified_size = 0;
+        $total_js_original_size = 0;
+        $total_js_minified_size = 0;
+        $total_savings = 0;
+
+        // Minify all posts and pages
+        $posts = $wpdb->get_results("SELECT ID, post_content FROM {$wpdb->posts} WHERE post_type IN ('post', 'page')");
+
+        foreach ($posts as $post) {
+            $original_content = $post->post_content;
+            $original_html_size = strlen($original_content);
+            $minified_html = $this->html_minify($original_content);
+            $minified_html_size = strlen($minified_html);
+            $html_savings = $original_html_size - $minified_html_size;
+
+            // Process CSS
+            preg_match_all('/<style.*?>(.*?)<\/style>/is', $minified_html, $css_matches);
+            $original_css_size = 0;
+            $minified_css_size = 0;
+            foreach ($css_matches[1] as $css) {
+                $original_css_size += strlen($css);
+                $minified_css_size += strlen($this->css_minify($css));
+            }
+
+            // Process JS
+            preg_match_all('/<script.*?>(.*?)<\/script>/is', $minified_html, $js_matches);
+            $original_js_size = 0;
+            $minified_js_size = 0;
+            foreach ($js_matches[1] as $js) {
+                $original_js_size += strlen($js);
+                $minified_js_size += strlen($this->js_minify($js));
+            }
+
+            // Update post content in the database
+            $wpdb->update(
+                $wpdb->posts,
+                ['post_content' => $minified_html],
+                ['ID' => $post->ID],
+                ['%s'],
+                ['%d']
+            );
+
+            // Update totals
+            $total_html_original_size += $original_html_size;
+            $total_html_minified_size += $minified_html_size;
+            $total_html_savings += $html_savings;
+            $total_css_original_size += $original_css_size;
+            $total_css_minified_size += $minified_css_size;
+            $total_js_original_size += $original_js_size;
+            $total_js_minified_size += $minified_js_size;
+        }
+
+        // Save total stats to options
+        $total_savings = ($total_html_savings + $total_css_original_size - $total_css_minified_size + $total_js_original_size - $total_js_minified_size);
+        update_option('minifier_stats', [
+            'html_original_size' => $total_html_original_size,
+            'html_minified_size' => $total_html_minified_size,
+            'html_savings' => $total_html_savings,
+            'css_original_size' => $total_css_original_size,
+            'css_minified_size' => $total_css_minified_size,
+            'js_original_size' => $total_js_original_size,
+            'js_minified_size' => $total_js_minified_size,
+            'total_savings' => $total_savings,
+            'total_percentage' => $this->calculate_percentage($total_html_original_size + $total_css_original_size + $total_js_original_size, $total_savings)
+        ]);
+
+        wp_redirect(admin_url('admin.php?page=minifier'));
+        exit;
+    }
+}
+
+new HTML_CSS_JS_Minifier_Plugin();
 
