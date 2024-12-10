@@ -381,9 +381,8 @@ add_action('wp', function () {
 ////////////////minifier///////////////////////
 
 
-
 class HTML_CSS_JS_Minifier_Plugin {
-    
+
     public function __construct() {
         add_action('init', [$this, 'init_hooks']);
         add_action('admin_menu', [$this, 'add_admin_menu']);
@@ -391,12 +390,16 @@ class HTML_CSS_JS_Minifier_Plugin {
     }
 
     public function init_hooks() {
-        ob_start([$this, 'minify_content']);
+        // Start minifying content for the front-end and back-end, excluding the admin area.
+        if (!is_admin()) {
+            ob_start([$this, 'minify_content']);
+        }
     }
 
     public function minify_content($buffer) {
+        // Only minify for front-end users
         if (is_admin()) {
-            return $buffer;
+            return $buffer; // Skip minification in the admin area
         }
         
         // Minify HTML
@@ -425,10 +428,10 @@ class HTML_CSS_JS_Minifier_Plugin {
             $minified_js_size += strlen($minified_js);
         }
 
-        // Calculate savings
+        // Calculate total savings
         $total_savings = ($html_savings + $original_css_size - $minified_css_size + $original_js_size - $minified_js_size);
 
-        // Save the stats
+        // Save the stats for tracking
         update_option('minifier_stats', [
             'html_original_size' => $original_html_size,
             'html_minified_size' => $minified_html_size,
@@ -494,7 +497,7 @@ class HTML_CSS_JS_Minifier_Plugin {
     }
 
     public function admin_page() {
-        if (!current_user_can('manage_options')) {
+        if (!current_user_can('read')) {
             return;
         }
 
@@ -602,4 +605,3 @@ class HTML_CSS_JS_Minifier_Plugin {
 }
 
 new HTML_CSS_JS_Minifier_Plugin();
-
